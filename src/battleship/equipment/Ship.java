@@ -15,13 +15,13 @@ import java.util.ArrayList;
 public class Ship extends Equipment {
     private ArrayList<EquipmentPosition> positions;
 
-    public Ship(int id, Player owner, GameController controller, ArrayList<EquipmentPosition> positions) {
-        super(id, owner, controller);
+    public Ship(Player owner, GameController controller, ArrayList<EquipmentPosition> positions) {
+        super(owner, controller);
         this.positions = positions;
     }
 
-    public Ship(int id, ArrayList<EquipmentPosition> positions) {
-        super(id);
+    public Ship(ArrayList<EquipmentPosition> positions) {
+        super();
         this.positions = positions;
     }
 

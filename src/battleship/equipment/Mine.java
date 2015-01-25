@@ -16,14 +16,19 @@ import java.util.Arrays;
 public class Mine extends Equipment {
     private EquipmentPosition position;
 
-    public Mine(int id, Player owner, GameController controller, EquipmentPosition position) {
-        super(id, owner, controller);
+    public Mine(Player owner, GameController controller, EquipmentPosition position) {
+        super(owner, controller);
         this.position = position;
     }
 
-    public Mine(int id, EquipmentPosition position) {
-        super(id);
+    public Mine(EquipmentPosition position) {
+        super();
         this.position = position;
+    }
+
+    public Mine(Position position) {
+        super();
+        this.position = new EquipmentPosition(position.x, position.y);
     }
 
     public EquipmentPosition getPosition() {

@@ -20,13 +20,12 @@ import java.util.regex.Pattern;
  * @author Ahanchi
  */
 public class ConsoleInput {
-    private int equipmentCount = 0;
     private GameController controller;
     private Scanner scanner;
     Log log;
 
-    int startWidth = 1, endWidth; // baz baste boodan dar JavaDoc
-    int startHeight = 1, endHeight;
+    int startWidth = 0, endWidth; // baz baste boodan dar JavaDoc
+    int startHeight = 0, endHeight;
 
 
 
@@ -65,8 +64,8 @@ public class ConsoleInput {
      */
     public Player[] getPlayers(Scanner console) throws IOException {
         Player[] players = new Player[2];
-        endHeight = console.nextInt();
-        endWidth = console.nextInt();
+        endHeight = console.nextInt()-1;
+        endWidth = console.nextInt()-1;
         console.nextLine();
 
         for (int i = 0; i < 2; i++) {
@@ -103,7 +102,11 @@ public class ConsoleInput {
         }
         if (!done)
             throw new IOException("done was not written");
-        Map map = new Map(controller, equipments, startWidth, endWidth, startHeight, endHeight);
+        Map.startHeight = startHeight;
+        Map.startWidth = startWidth;
+        Map.endWidth = endWidth;
+        Map.endHeight = endHeight;
+        Map map = new Map(false, controller, equipments);
         for (Equipment equipment : map.getEquipments())
             for (Position position : equipment.getPositions())
                 if (!(startWidth <= position.x && position.x <= endWidth && startHeight <= position.y && position.y <= endHeight))
@@ -123,7 +126,7 @@ public class ConsoleInput {
             console.nextLine();
             if (count >= GameEngine.ANTIAIRCRAFT_COUNT)
                 return;
-            equipments.add(new AntiAircraft(equipmentCount++, row));
+            equipments.add(new AntiAircraft(row));
             count++;
         }
     }
@@ -135,25 +138,21 @@ public class ConsoleInput {
      */
     void getMine(Scanner console, ArrayList<Equipment> equipments) throws IOException {
         int count = 0;
-//        Pattern minePattern = Pattern.compile("(?<x>\\d+),(?<y>\\d+)");
-        Pattern minePattern = Pattern.compile("(\\d+),(\\d+)");
+        Pattern minePattern = Pattern.compile("(?<x>\\d+),(?<y>\\d+)");
         while (console.hasNext(minePattern)) {
             String input  = console.nextLine();
             input = input.toLowerCase();
             Matcher matcher = minePattern.matcher(input);
             int x, y;
             if (matcher.find()) {
-//                x = Integer.parseInt(matcher.group("x"));
-//                y = Integer.parseInt(matcher.group("y"));
-
-                x = Integer.parseInt(matcher.group(1));
-                y = Integer.parseInt(matcher.group(2));
+                x = Integer.parseInt(matcher.group("x"));
+                y = Integer.parseInt(matcher.group("y"));
             }
             else
                 throw new IOException("Wrong Mine Input Format");
             if (count >= GameEngine.MINE_COUNT)
                 continue;
-            equipments.add(new Mine(equipmentCount++, new EquipmentPosition(x, y)));
+            equipments.add(new Mine(new EquipmentPosition(x, y)));
             count++;
         }
     }
@@ -164,31 +163,33 @@ public class ConsoleInput {
      * @param equipments list of equipments to append the read ships
      */
     void getShips(Scanner console, ArrayList<Equipment> equipments) throws IOException {
-        int[] shipLengths = {4, 3, 3, 2, 2, 1, 1};
-        int dx[] = {1, 0};
-        int dy[] = {0, 1};
+        int[] shipLengths = GameEngine.SHIP_LENGTHS;
         for (int shipLength : shipLengths) {
             String input = console.nextLine();
             input = input.toLowerCase();
-//            Matcher matcher = Pattern.compile("(?<x>\\d+),(?<y>\\d+) (?<direction>h|v)").matcher(input);
-            Matcher matcher = Pattern.compile("(\\d+),(\\d+) (h|v)").matcher(input);
-            ArrayList<EquipmentPosition> positions = new ArrayList<EquipmentPosition>();
+            Matcher matcher = Pattern.compile("(?<x>\\d+),(?<y>\\d+) (?<direction>h|v)").matcher(input);
             if (matcher.find()) {
+                int x = Integer.parseInt(matcher.group("x")), y = Integer.parseInt(matcher.group("y"));
+                ArrayList<EquipmentPosition> positions = getShipPositions(x, y, shipLength, matcher.group("direction").equals("h"));
+                equipments.add(new Ship(positions));
 
-//                int x = Integer.parseInt(matcher.group("x")), y = Integer.parseInt(matcher.group("y"));
-                int x = Integer.parseInt(matcher.group(1)), y = Integer.parseInt(matcher.group(2));
-                int direction;
-//                if (matcher.group("direction").equals("h"))
-                if (matcher.group(3).equals("h"))
-                    direction = 0;
-                else
-                    direction = 1;
-                for (int i = 0; i < shipLength; i++)
-                    positions.add(new EquipmentPosition(x + i*dx[direction], y + i*dy[direction]));
             }
             else
                 throw new IOException("Wrong Ship Input Format");
-            equipments.add(new Ship(equipmentCount++, positions));
+
         }
+    }
+    public static ArrayList<EquipmentPosition> getShipPositions(int x, int y, int shipLength, boolean horizontal) {
+        int dx[] = {1, 0};
+        int dy[] = {0, 1};
+        ArrayList<EquipmentPosition> positions = new ArrayList<EquipmentPosition>();
+        int direction = horizontal ? 0 : 1;
+        for (int i = 0; i < shipLength; i++)
+            positions.add(new EquipmentPosition(x + i*dx[direction], y + i*dy[direction]));
+        return positions;
+    }
+
+    public static ArrayList<EquipmentPosition> getShipPositions(Position startPosition, int shipLength, boolean horizontal) {
+        return getShipPositions(startPosition.x, startPosition.y, shipLength, horizontal);
     }
 }

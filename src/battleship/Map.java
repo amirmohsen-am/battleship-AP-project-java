@@ -5,6 +5,9 @@ import battleship.equipment.Equipment;
 import battleship.equipment.Mine;
 import battleship.equipment.Ship;
 import battleship.exception.GameOverException;
+import battleship.graphic.Graphic;
+import battleship.graphic.GraphicObject;
+import battleship.graphic.image.GameImage;
 import battleship.position.EquipmentPosition;
 import battleship.position.Position;
 
@@ -15,24 +18,47 @@ import java.util.ArrayList;
  * @author Ahanchi
  */
 public class Map {
-    private GameController controller;
+    private GameController controller = null;
     /** The Player variable must be set in initialization*/
     private Player owner = null;
     private ArrayList<Equipment> equipments;
+    private Graphic graphic;
+    boolean isVisible[][];
+    boolean isBlown[][];
+
+    public void setGraphic(Graphic graphic) {
+        this.graphic = graphic;
+    }
 
     /** These variables are in [) (include-excluded) format*/
-    int startWidth, endWidth;
+    public static int startWidth = -1, endWidth;
     /** These variables are in [) (include-excluded) format*/
-    int startHeight, endHeight;
+    public static int startHeight = -1, endHeight;
 
+    public static int getWidth() {
+        if (startWidth == -1)
+            throw new RuntimeException("width of map was not set");
+        return endWidth - startWidth+1;
+    }
 
-    public Map(GameController controller, ArrayList<Equipment> equipments, int startWidth, int endWidth, int startHeight, int endHeight) {
+    public static int getHeight() {
+        if (startHeight == -1)
+            throw new RuntimeException("height of map was not set");
+        return endHeight - startHeight+1;
+    }
+
+    public Map(boolean cellsVisible) {
+        equipments = new ArrayList<Equipment>();
+        if (startWidth == -1 || startHeight == -1)
+            throw new RuntimeException("width or height of map was not set");
+        isVisible = new boolean[getWidth()][getHeight()];
+        isBlown = new boolean[getWidth()][getHeight()];
+    }
+
+    public Map(boolean cellsVisible, GameController controller, ArrayList<Equipment> equipments) {
+        this(cellsVisible);
         this.controller = controller;
         this.equipments = equipments;
-        this.startWidth = startWidth;
-        this.endWidth = endWidth;
-        this.startHeight = startHeight;
-        this.endHeight = endHeight;
     }
 
     {
@@ -115,7 +141,7 @@ public class Map {
         controller.reportRadar(result, owner);
 
     }
-    
+
     /** Checks to see if all ships on the map have been destroyed
      *
      * @return true iff all the ships of the map have been destroyed
@@ -125,5 +151,12 @@ public class Map {
             if (equipment instanceof Ship && !equipment.isDestroyed())
                 return false;
         return true;
+    }
+    public void addEquipment(Equipment equipment, GameImage gameImage) {
+        equipments.add(equipment);
+        graphic.addGraphicObject(new GraphicObject(
+                equipment.getPositions().get(0),
+                Graphic.getMiddleGraphicPosition(equipment.getPositions()),
+                gameImage));
     }
 }

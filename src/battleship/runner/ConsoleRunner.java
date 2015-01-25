@@ -1,15 +1,11 @@
-package battleship.console;
+package battleship.runner;
 
 import battleship.ConsoleInput;
 import battleship.GameController;
 import battleship.GameEngine;
 import battleship.Log;
-import battleship.exception.GameOverException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.Scanner;
 
@@ -30,7 +26,6 @@ public class ConsoleRunner {
         controller.init(engine, log, consoleInput);
         controller.start();
         log.close();
-//            log.close(); //TODO
 
     }
 }

@@ -15,19 +15,19 @@ import java.util.Arrays;
 public class AntiAircraft extends Equipment {
     private EquipmentPosition position;
 
-    public AntiAircraft(int id, Player owner, GameController controller, EquipmentPosition position) {
-        super(id, owner, controller);
+    public AntiAircraft(Player owner, GameController controller, EquipmentPosition position) {
+        super(owner, controller);
         this.position = position;
     }
 
-//    public AntiAircraft(int id, EquipmentPosition position) {
-//        super(id);
-//        this.position = position;
-//    }
-
-    public AntiAircraft(int id, int row) {
-        super(id);
+    public AntiAircraft(int row) {
+        super();
         position = new EquipmentPosition(1, row);
+    }
+
+    public AntiAircraft(Position position) {
+        super();
+        this.position = new EquipmentPosition(position.x, position.y);
     }
 
     public EquipmentPosition getPosition() {

@@ -19,9 +19,15 @@ public class GameEngine {
     public final static int RADAR_MAX_USES = 4;
     public final static int AIRCRAFT_MAX_USES = 2;
     public final static int RADAR_RADIUS = 1;
+
+    public static final int[] SHIP_LENGTHS = {4, 3, 3, 2, 2, 1, 1};
+
     {
         timer = 0;
     }
+
+    public static int equipmentCount = 0;
+
     private Player[] players;
     private int timer;
     private ArrayList<Queue<String>> events = new ArrayList<Queue<String>>();
@@ -47,13 +53,9 @@ public class GameEngine {
      */
     public void update() throws GameOverException {
         timer++;
-//        Pattern attackPattern = Pattern.compile("team (?<name>.+) attack (?<x>\\d+),(?<y>\\d+)");
-//        Pattern radarPattern = Pattern.compile("team (?<name>.+) radar (?<x>\\d+),(?<y>\\d+)");
-//        Pattern aircraftPattern = Pattern.compile("team (?<name>.+) aircraft (?<row>\\d+)");
-
-        Pattern attackPattern = Pattern.compile("team (.+) attack (\\d+),(\\d+)");
-        Pattern radarPattern = Pattern.compile("team (.+) radar (\\d+),(\\d+)");
-        Pattern aircraftPattern = Pattern.compile("team (.+) aircraft (\\d+)");
+        Pattern attackPattern = Pattern.compile("team (?<name>.+) attack (?<x>\\d+),(?<y>\\d+)");
+        Pattern radarPattern = Pattern.compile("team (?<name>.+) radar (?<x>\\d+),(?<y>\\d+)");
+        Pattern aircraftPattern = Pattern.compile("team (?<name>.+) aircraft (?<row>\\d+)");
 
         resizeEvents(timer+1);
         while (!events.get(timer).isEmpty()) {
@@ -62,7 +64,6 @@ public class GameEngine {
             Matcher radarMatcher = radarPattern.matcher(query);
             Matcher aircraftMatcher = aircraftPattern.matcher(query);
             Matcher matcher;
-            /*
             if (attackMatcher.find()) {
                 matcher = attackMatcher;
                 Player player = findPlayerByName(matcher.group("name"));
@@ -80,25 +81,7 @@ public class GameEngine {
                 controller.aircraft(row, player);
             } else
                 throw new RuntimeException("Query has Wrong Format");
-                */
 
-            if (attackMatcher.find()) {
-                matcher = attackMatcher;
-                Player player = findPlayerByName(matcher.group(1));
-                Position targetPosition = new Position(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
-                controller.attack(targetPosition, player);
-            } else if (radarMatcher.find()) {
-                matcher = radarMatcher;
-                Player player = findPlayerByName(matcher.group(1));
-                Position targetPosition = new Position(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
-                controller.radar(targetPosition, player);
-            } else if (aircraftMatcher.find()) {
-                matcher = aircraftMatcher;
-                Player player = findPlayerByName(matcher.group(1));
-                int row = Integer.parseInt(matcher.group(2));
-                controller.aircraft(row, player);
-            } else
-                throw new RuntimeException("Query has Wrong Format");
         }
     }
 

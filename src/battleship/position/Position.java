@@ -29,6 +29,22 @@ public class Position {
         return Math.max(Math.abs(p.x - x), Math.abs(p.y - y));
     }
 
+    public void add(Position position) {
+        x += position.x;
+        y += position.y;
+    }
+
+    public void set (Position p) {
+        x = p.x;
+        y = p.y;
+    }
+
+    @Override
+    public Position clone() {
+        return new Position(x, y);
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

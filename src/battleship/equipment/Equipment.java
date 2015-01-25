@@ -3,6 +3,7 @@ package battleship.equipment;
 //import battleship.Player;
 
 import battleship.GameController;
+import battleship.GameEngine;
 import battleship.Player;
 import battleship.exception.GameOverException;
 import battleship.position.EquipmentPosition;
@@ -21,14 +22,13 @@ abstract public class Equipment {
     private GameController controller = null;
     // they have to be set before game is started
 
-    public Equipment(int id, Player owner, GameController controller) {
-        this.id = id;
+    public Equipment(Player owner, GameController controller) {
+        id = GameEngine.equipmentCount++;
         this.owner = owner;
         this.controller = controller;
     }
 
-    public Equipment(int id) {
-        this.id = id;
+    public Equipment() {
     }
 
     public void setOwner(Player owner) {
