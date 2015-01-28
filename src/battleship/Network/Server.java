@@ -4,83 +4,95 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
-import java.util.Scanner;
+import java.net.Socket;
+import java.util.ArrayList;
 
-import java.io.*;
-import java.net.ServerSocket;
-import java.util.Scanner;
+public class Server {
 
-public class Server extends Network{
-    ServerSocket myService = null;
+    int portNumber;
+    String machineName;
+    ServerSocket myService;
+    ArrayList<ObjectOutputStream> outputsNOS = new ArrayList<ObjectOutputStream>();
+    Socket ret;
 
-    Server(){};
-
-    Server(String machineName, int portNumber) {
-        return;
-        /*this.machineName = machineName;
-        this.portNumber = portNumber;*/
+    public Server() {
+        this("127.0.0.1",3109);
     }
 
-    public void start() {
-        System.out.println("server is here");
+    public Server(String machineName, int portNumber) {
+        this.machineName = machineName;
+        this.portNumber = portNumber;
         try {
-            scanner = new Scanner(System.in);
             myService = new ServerSocket(portNumber);
-            userSocket = myService.accept();
-            output = new ObjectOutputStream(userSocket.getOutputStream());
-            input = new ObjectInputStream(userSocket.getInputStream());
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
-
-        chat();
     }
 
-    private void chat() {
-        System.out.println("server you are connected");
+    public int getPortNumber() {
+        return portNumber;
+    }
 
-        Thread myThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
+    public String getMachineName() {
+        return machineName;
+    }
+
+    private Socket Connect(NetworkStream client) {
+        ret = null;
+        try {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
                     try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    String s = null;
-                    try {
-                        s = (String)input.readObject();
+                        ret = myService.accept();
                     } catch (IOException e) {
                         e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
                     }
-                    System.out.println("client: " + s);
                 }
-            }
-        });
-        myThread.start();
+            });
+            thread.start();
+            client.clientSocket = new Socket(machineName, portNumber);
 
-        Thread myThread2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    String s = scanner.nextLine();
-                    System.out.println("server : " + s);
-                    try {
-                        output.writeObject(s);
-                    } catch (IOException e) {
-                        System.out.println(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    void add(NetworkOutputStream outputStream) {
+        Socket socket = Connect(outputStream);
+        try {
+            outputsNOS.add(new ObjectOutputStream(socket.getOutputStream()));
+            outputStream.input = new ObjectInputStream(outputStream.clientSocket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void add(NetworkInputStream inputStream) {
+        Socket socket = Connect(inputStream);
+        try {
+            final ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+            inputStream.output = new ObjectOutputStream(inputStream.clientSocket.getOutputStream());
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while(true) {
+                        try {
+                            String s = (String) input.readObject();
+                            for (ObjectOutputStream output : outputsNOS)
+                                output.writeObject(s);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
-        });
-        myThread2.start();
+            });
+            thread.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
