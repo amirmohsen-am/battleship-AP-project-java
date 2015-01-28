@@ -9,22 +9,27 @@ import java.util.ArrayList;
  * Created by persianpars on 1/25/15.
  */
 public class GameImages {
-    public static GameImage[] Ship = new GameImage[4];
+    public static GameImage[] ShipH = new GameImage[4];
+    public static GameImage[] ShipV = new GameImage[4];
     public static GameImage Mine;
     public static GameImage AntiAircraft;
     public static GameImage CursorAttack;
     public static GameImage CursorRadar;
     public static GameImage CursorAircraft;
     public static GameImage ExplodeAnimation;
+    public static GameImage VisibleCell;
+    public static GameImage Cloud;
 
     public static int ExplodeAnimationSpeed = 100;
+    public static int CloudSpeed = 100;
 
     public static ArrayList<GameImage> gameImageArrayList = new ArrayList<GameImage>();
 
     static
     {
-        for (int i = 0; i < Ship.length; i++) {
-            Ship[i] = new GameImage("Ship" + (i + 1), "Ship" + (i + 1), Graphic.CELL_WIDTH * (i + 1), Graphic.CELL_HEIGHT);
+        for (int i = 0; i < ShipH.length; i++) {
+            ShipH[i] = new GameImage("Ship" + (i + 1) + "H", "Ship" + (i + 1) + "H", Graphic.CELL_WIDTH * (i + 1), Graphic.CELL_HEIGHT);
+            ShipV[i] = new GameImage("Ship" + (i + 1) + "V", "Ship" + (i + 1) + "V", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT  * (i + 1));
 //            gameImageArrayList.add(Ship[i]);
         }
         Mine = new GameImage("Mine", "Mine", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
@@ -35,6 +40,9 @@ public class GameImages {
         CursorAircraft = new GameImage("CursorAircraft", "CursorAircraft", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
 
         ExplodeAnimation = new GameImage("Explosion", "Explosion", Graphic.CELL_WIDTH+10, Graphic.CELL_HEIGHT+10);
+
+        VisibleCell = new GameImage("VisibleCell", "VisibleCell");
+        Cloud = new GameImage("Cloud", "Cloud", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
 
 //        gameImageArrayList.add(Mine);
 //        gameImageArrayList.add(AntiAircraft);
@@ -47,15 +55,26 @@ public class GameImages {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
+            else if (field.getType() == GameImage[].class) {
+                try {
+                    for (GameImage gameImage : (GameImage[])field.get(o)) {
+                        gameImageArrayList.add(gameImage);
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
     }
 
     public static GameImage getGameImage(String name) {
         for (GameImage gameImage : gameImageArrayList)
-            if (gameImage.name.equals(name))
+            if (gameImage.name.equals(name)) {
+                System.out.println(gameImage.name);
                 return gameImage;
-        throw new RuntimeException("GameImage " + name + "not found");
+            }
+        throw new RuntimeException("GameImage " + name + " not found");
     }
 }
 

@@ -3,6 +3,8 @@ package battleship.graphic.image;
 import battleship.graphic.Graphic;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.reflect.Array;
 import java.net.URISyntaxException;
@@ -16,20 +18,13 @@ public class GameImage {
     ImageIcon[] images;
     int width, height;
 
+
     public int getWidth() {
         return width;
     }
 
     public int getHeight() {
         return height;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public ImageIcon[] getImages() {
-        return images;
     }
 
     public GameImage(String name, String folder, int width, int height) {
@@ -65,7 +60,20 @@ public class GameImage {
         }
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public ImageIcon[] getImages() {
+        return images;
+    }
+
     public GameImage(String name, String path) {
         this(name, path, Graphic.CELL_HEIGHT, Graphic.CELL_WIDTH);
+    }
+
+    public GameImage clone() {
+        return new GameImage(name, path, width, height);
     }
 }

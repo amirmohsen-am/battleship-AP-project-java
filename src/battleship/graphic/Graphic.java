@@ -12,8 +12,8 @@ import java.util.ArrayList;
 public class Graphic {
 
     // has to be odd
-    public static final int CELL_WIDTH = 31;
-    public static final int CELL_HEIGHT = 31;
+    public static final int CELL_WIDTH = 51;
+    public static final int CELL_HEIGHT = 51;
 
     public static final int FPS = 30;
 
@@ -54,12 +54,6 @@ public class Graphic {
 //    }
 
 
-    public static boolean isValidPosition(Position position) {
-        if (position.x < 0 || position.x >= Map.getWidth() * CELL_WIDTH ||
-            position.y < 0 || position.y >= Map.getHeight() * CELL_HEIGHT)
-            return false;
-        return true;
-    }
 
     private ArrayList<GraphicObject> graphicObjects = new ArrayList<GraphicObject>();
 

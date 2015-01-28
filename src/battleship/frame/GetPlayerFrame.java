@@ -53,14 +53,20 @@ public class GetPlayerFrame extends JFrame {
         getContentPane().add(mainPanel);
 
         MapPanel mapPanel = new MapPanel();
-        cursor = new GraphicObject(new Position(0, 0), GameImages.Ship[0]);
+        cursor = new GraphicObject(new Position(0, 0), GameImages.ShipH[0], 0, 10);
         graphic.addGraphicObject(cursor);
-        mapPanel.init(graphic);
 
-        map = new Map(true);
+        for (int i = 0; i < Map.getHeight(); i++)
+            for (int j = 0; j < Map.getWidth(); j++)
+                graphic.addGraphicObject(new GraphicObject(new Position(j, i), GameImages.Cloud, GameImages.CloudSpeed, true, 9));
+
+        map = new Map(false);
         player = new Player(name, map);
         player.setGraphic(graphic);
         map.setOwner(player);
+
+        mapPanel.init(map, graphic);
+
 
         KeyListener keyListener = new KeyListener() {
 
@@ -80,17 +86,28 @@ public class GetPlayerFrame extends JFrame {
                         cursor.goUpOneRow();
                         break;
                     case KeyEvent.VK_SPACE:
-                        horizontal = Boolean.logicalXor(horizontal, true);
-                        // TODO : rotation
+                        cursor.rotate();
+                        for (int i = 0; i < informationPanel.shipButton.length; i++)
+                            if (informationPanel.shipButton[i].isSelected()) {
+                                if (cursor.isHorizontal())
+                                    cursor.setGameImage(GameImages.ShipH[i]);
+                                else
+                                    cursor.setGameImage(GameImages.ShipV[i]);
+                            }
+                        cursor.setMiddleGraphicPosition(cursor.recalcMiddleGraphPosition());
                         break;
                     case KeyEvent.VK_ENTER:
                         for (int i = 0; i < informationPanel.shipButton.length; i++)
-                            if (informationPanel.shipButton[i].isSelected())
-                                map.addEquipment(new Ship(ConsoleInput.getShipPositions(cursor.getMapPosition(), (i+1), horizontal)), cursor.getGameImage());
+                            if (informationPanel.shipButton[i].isSelected()) {
+                                if (cursor.isHorizontal())
+                                    map.addEquipment(new Ship(ConsoleInput.getShipPositions(cursor.getMapPosition(), (i + 1), cursor.isHorizontal())), GameImages.ShipH[i]);
+                                else
+                                    map.addEquipment(new Ship(ConsoleInput.getShipPositions(cursor.getMapPosition(), (i + 1), cursor.isHorizontal())), GameImages.ShipV[i]);
+                            }
                         if (informationPanel.mineButton.isSelected())
-                            map.addEquipment(new Mine(cursor.getMapPosition()), cursor.getGameImage());
+                            map.addEquipment(new Mine(cursor.getMapPosition()), GameImages.Mine);
                         if (informationPanel.antiAircraftButton.isSelected())
-                            map.addEquipment(new AntiAircraft(cursor.getMapPosition()), cursor.getGameImage());
+                            map.addEquipment(new AntiAircraft(cursor.getMapPosition()), GameImages.AntiAircraft);
                         break;
                 }
             }
@@ -136,7 +153,7 @@ public class GetPlayerFrame extends JFrame {
 
     }
     private class InformationPanel extends JPanel {
-        JRadioButton[] shipButton = new JRadioButton[GameImages.Ship.length];
+        JRadioButton[] shipButton = new JRadioButton[GameImages.ShipH.length];
         JRadioButton mineButton;
         JRadioButton antiAircraftButton;
         ButtonGroup buttonGroup;
@@ -151,7 +168,7 @@ public class GetPlayerFrame extends JFrame {
             buttonGroup = new ButtonGroup();
 
             for (int i = 0; i < shipButton.length; i++)
-                shipButton[i] = new TypeButton("Ship" + (i+1), GameImages.Ship[i]);
+                shipButton[i] = new TypeButton("Ship" + (i+1), GameImages.ShipH[i]);
             shipButton[0].setSelected(true);
             mineButton = new TypeButton("Mine", GameImages.Mine);
             antiAircraftButton = new TypeButton("AntiAircraft", GameImages.AntiAircraft);

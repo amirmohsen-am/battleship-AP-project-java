@@ -1,6 +1,8 @@
 package battleship.runner;
 
 import battleship.*;
+import battleship.Network.Client;
+import battleship.Network.Network;
 import battleship.frame.GetPlayerFrame;
 import battleship.frame.PlayingFrame;
 
@@ -24,6 +26,8 @@ public class GraphicRunner {
 
         GameController controller = new GameController();
         GameEngine engine = new GameEngine(getPlayers(), controller);
+
+
         ConsoleInput consoleInput = new ConsoleInput(new Scanner(System.in), controller, log);
 
         PlayingFrame playingFrame = new PlayingFrame(writer);

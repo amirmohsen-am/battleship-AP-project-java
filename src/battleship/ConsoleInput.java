@@ -1,5 +1,6 @@
 package battleship;
 
+import battleship.Network.Network;
 import battleship.equipment.AntiAircraft;
 import battleship.equipment.Equipment;
 import battleship.equipment.Mine;
@@ -8,6 +9,7 @@ import battleship.exception.GameOverException;
 import battleship.exception.NoMoreInputException;
 import battleship.position.EquipmentPosition;
 import battleship.position.Position;
+import sun.nio.ch.Net;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,8 +42,8 @@ public class ConsoleInput {
      * @throws Exception if the game is not over, but there's no more input
      */
     public void next() throws NoMoreInputException, IOException, GameOverException {
-        if (!gameInput.hasNext())
-            throw new NoMoreInputException();
+//        if (!gameInput.hasNext())
+//            throw new NoMoreInputException();
         String input = gameInput.nextLine();
         input = input.toLowerCase();
         if (input.contains("go")) {
@@ -59,7 +61,7 @@ public class ConsoleInput {
 
     /** Reads the names and map of players
      *
-     * @param mapInput the gameInput to read from
+     * @param mapInput the scanner to read from
      * @return the read players
      */
     public Player[] getPlayers(Scanner mapInput) throws IOException {
@@ -80,7 +82,7 @@ public class ConsoleInput {
     
     /** Reads the map of a player
      *
-     * @param mapInput the gameInput to read from
+     * @param mapInput the scanner to read from
      * @return the read map
      */
     Map getMap(Scanner mapInput) throws IOException {
@@ -116,7 +118,7 @@ public class ConsoleInput {
 
     /** Reads an antiAircraft
      *
-     * @param mapInput the gameInput to read from
+     * @param mapInput the scanner to read from
      * @param equipments list of equipments to append the read antiAircraft
      */
     void getAntiAircraft(Scanner mapInput, ArrayList<Equipment> equipments) {
@@ -133,7 +135,7 @@ public class ConsoleInput {
 
     /** Reads a mine
      *
-     * @param mapInput the gameInput to read from
+     * @param mapInput the scanner to read from
      * @param equipments list of equipments to append the read mine
      */
     void getMine(Scanner mapInput, ArrayList<Equipment> equipments) throws IOException {
@@ -159,7 +161,7 @@ public class ConsoleInput {
 
     /** Reads all the ships of a player
      *
-     * @param mapInput the gameInput to read from
+     * @param mapInput the scanner to read from
      * @param equipments list of equipments to append the read ships
      */
     void getShips(Scanner mapInput, ArrayList<Equipment> equipments) throws IOException {

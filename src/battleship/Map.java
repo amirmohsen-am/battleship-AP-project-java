@@ -10,6 +10,7 @@ import battleship.graphic.GraphicObject;
 import battleship.graphic.image.GameImage;
 import battleship.position.EquipmentPosition;
 import battleship.position.Position;
+import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 
@@ -22,8 +23,8 @@ public class Map {
     /** The Player variable must be set in initialization*/
     private Player owner = null;
     private ArrayList<Equipment> equipments;
-    boolean isVisible[][];
-    boolean isBlown[][];
+    boolean visible[][];
+    boolean blown[][];
 
 
     /** These variables are in [) (include-excluded) format*/
@@ -47,8 +48,11 @@ public class Map {
         equipments = new ArrayList<Equipment>();
         if (startWidth == -1 || startHeight == -1)
             throw new RuntimeException("width or height of map was not set");
-        isVisible = new boolean[getWidth()][getHeight()];
-        isBlown = new boolean[getWidth()][getHeight()];
+        visible = new boolean[getWidth()][getHeight()];
+        for (int i = 0; i < getHeight(); i++)
+            for (int j = 0; j < getWidth(); j++)
+                visible[i][j] = cellsVisible;
+        blown = new boolean[getWidth()][getHeight()];
     }
 
     public Map(boolean cellsVisible, GameController controller, ArrayList<Equipment> equipments) {
@@ -63,6 +67,28 @@ public class Map {
 
     public void setOwner(Player owner) {
         this.owner = owner;
+    }
+
+    public boolean isVisible(int x, int y) {
+        return visible[x][y];
+    }
+    public boolean isVisible(Position position) {
+        return visible[position.x][position.y];
+    }
+
+    public boolean isBlown(int x, int y) {
+        return blown[x][y];
+    }
+    public boolean isBlown(Position position) {
+        return blown[position.x][position.y];
+    }
+
+    public void setVisible(int x, int y, boolean visible) {
+        this.visible[x][y] = visible;
+    }
+
+    public void setBlown(int x, int y, boolean blown) {
+        this.blown[x][y] = blown;
     }
 
     public ArrayList<Equipment> getEquipments() {

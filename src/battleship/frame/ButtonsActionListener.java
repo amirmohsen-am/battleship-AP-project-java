@@ -13,17 +13,17 @@ import java.awt.event.ActionListener;
  */
 public class ButtonsActionListener implements ActionListener {
     GraphicObject cursor;
-    GetPlayerFrame frame;
 
     public ButtonsActionListener(GetPlayerFrame frame, GraphicObject cursor) {
-        this.frame = frame;
         this.cursor = cursor;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        cursor.setGameImage(GameImages.getGameImage(e.getActionCommand()));
-        cursor.setMiddleGraphicPosition(Graphic.getMiddleGraphicPosition(ConsoleInput.getShipPositions(
-                cursor.getMapPosition(), Math.max(cursor.getHeight()/Graphic.CELL_HEIGHT, cursor.getWidth()/Graphic.CELL_WIDTH), frame.horizontal)));
+        String name = e.getActionCommand();
+        if (name.contains("Ship"))
+            name = name + (cursor.isHorizontal() ? "H" : "V");
+        cursor.setGameImage(GameImages.getGameImage(name));
+        cursor.setMiddleGraphicPosition(cursor.recalcMiddleGraphPosition());
     }
 }

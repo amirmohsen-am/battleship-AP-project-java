@@ -14,6 +14,6 @@ public class TypeButton extends JRadioButton {
 //            super(text, gameImage.getImages()[0]);
         super(text);
         this.gameImage = gameImage;
-        this.setActionCommand(gameImage.getName());
+        this.setActionCommand(text);
     }
 }
