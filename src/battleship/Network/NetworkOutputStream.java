@@ -1,26 +1,23 @@
 package battleship.Network;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class NetworkOutputStream extends NetworkStream {
-    ObjectInputStream input;
+    ObjectOutputStream output;
 
-    NetworkOutputStream(){}
+    NetworkOutputStream(){};
 
     public NetworkOutputStream(Server server) {
         super(server);
         server.add(this);
     }
 
-    public String nextLine() {
+    public void send(String s) {
         try {
-            return (String)input.readObject();
+            output.writeObject(s);
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
-        return null;
     }
 }

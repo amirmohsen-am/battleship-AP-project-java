@@ -59,7 +59,7 @@ public class Server {
         return ret;
     }
 
-    void add(NetworkOutputStream outputStream) {
+    void add(NetworkInputStream outputStream) {
         Socket socket = Connect(outputStream);
         try {
             outputsNOS.add(new ObjectOutputStream(socket.getOutputStream()));
@@ -69,7 +69,7 @@ public class Server {
         }
     }
 
-    void add(NetworkInputStream inputStream) {
+    void add(NetworkOutputStream inputStream) {
         Socket socket = Connect(inputStream);
         try {
             final ObjectInputStream input = new ObjectInputStream(socket.getInputStream());

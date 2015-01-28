@@ -1,9 +1,11 @@
 package battleship.frame;
 
-import battleship.ConsoleInput;
+import battleship.ConsoleOutput;
 import battleship.GameController;
 import battleship.GameEngine;
-import battleship.Map;
+import battleship.Network.NetworkInputStream;
+import battleship.Network.NetworkOutputStream;
+import battleship.Player;
 import battleship.exception.GameOverException;
 import battleship.frame.button.TypeButton;
 import battleship.frame.panel.MapPanel;
@@ -18,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.DataOutputStream;
 
 /**
  * Created by persianpars on 1/28/15.
@@ -27,7 +28,9 @@ public class PlayingFrame extends JFrame {
     GameController controller;
     GameEngine engine;
 
-    DataOutputStream writer;
+    Player[] players;
+
+    NetworkOutputStream[] sender;
 
     Graphic[] graphic;
     GraphicObject[] cursor = new GraphicObject[2];
@@ -38,14 +41,15 @@ public class PlayingFrame extends JFrame {
 
     InformationPanel[] informationPanel = new InformationPanel[2];
 
-    public PlayingFrame(DataOutputStream writer) {
-        this.writer = writer;
+    public PlayingFrame(NetworkOutputStream sender[]) {
+        this.sender = sender;
     }
 
-    public void init(final GameController controller, GameEngine engine) {
+    public void init(final GameController controller, final GameEngine engine) {
         this.controller = controller;
         this.engine = engine;
         graphic = controller.getGraphic();
+        players = engine.getPlayers();
 //        graphic = new Graphic[2];
 //        for (int i = 0; i < 2; i++) {
 //            graphic[i] = new Graphic();
@@ -67,7 +71,7 @@ public class PlayingFrame extends JFrame {
             mapPanel[i] = new MapPanel();
             cursor[i] = new GraphicObject(new Position(0, 0), GameImages.CursorAttack);
             graphic[i].addGraphicObject(cursor[i]);
-            mapPanel[i].init(engine.getPlayers()[i].getMap(), graphic[i]);
+            mapPanel[i].init(players[i].getMap(), graphic[i]);
 
             informationPanel[i] = new InformationPanel();
 
@@ -104,10 +108,17 @@ public class PlayingFrame extends JFrame {
                         cursor[0].goRightOneColumn();
                         break;
                     case KeyEvent.VK_F:
-                        try {
-                            controller.attack(cursor[1].getMapPosition(), controller.getEngine().getPlayers()[0]);
-                        } catch (GameOverException e1) {
-                            e1.printStackTrace();
+                        String text = ButtonSelected.getSelectedButtonText(informationPanel[0].buttonGroup);
+                        switch (text) {
+                            case "Attack":
+                                sender[0].send(engine.getTimer() + " " + ConsoleOutput.attack(players[0], cursor[0].getMapPosition()));
+                                break;
+                            case "Radar":
+                                sender[0].send(engine.getTimer() + " " + ConsoleOutput.radar(players[0], cursor[0].getMapPosition()));
+                                break;
+                            case "Aircraft":
+                                sender[0].send(engine.getTimer() + " " + ConsoleOutput.aircraft(players[0], cursor[0].getMapPosition().y));
+                                break;
                         }
                 }
             }
@@ -189,5 +200,6 @@ public class PlayingFrame extends JFrame {
             add(radarButton);
             add(aircraftButton);
         }
+
     }
 }

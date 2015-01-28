@@ -3,9 +3,7 @@ package battleship;
 import battleship.exception.GameOverException;
 import battleship.position.Position;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +18,8 @@ public class GameEngine {
     public final static int AIRCRAFT_MAX_USES = 2;
     public final static int RADAR_RADIUS = 1;
 
+    public static final int GO_MS = 50;
+
     public static final int[] SHIP_LENGTHS = {4, 3, 3, 2, 2, 1, 1};
 
     {
@@ -29,8 +29,8 @@ public class GameEngine {
     public static int equipmentCount = 0;
 
     private Player[] players;
-    private int timer;
-    private ArrayList<Queue<String>> events = new ArrayList<Queue<String>>();
+    private double timer;
+    private SortedMap<Double, LinkedList<String>> events = new HashMap<>();
     private GameController controller;
 
     public GameEngine(Player[] players, GameController controller) {
@@ -38,26 +38,30 @@ public class GameEngine {
         this.controller = controller;
     }
 
-    /** Extends events to the desired length
-     *
-     * @param size the desired length
-     */
-    public void resizeEvents(int size) {
-        while (events.size() < size)
-            events.add(new LinkedList<String>());
+    public double getTimer() {
+        return timer;
     }
+
+//    /** Extends events to the desired length
+//     *
+//     * @param size the desired length
+//     */
+//    public void resizeEvents(double size) {
+//        while (events.size() < size)
+//            events.set(new LinkedList<String>());
+//    }
 
     /** Handles all the events in the Time time
      *
      * @throws Exception for wrong format of event input
      */
     public void update() throws GameOverException {
-        timer++;
+        timer += GO_MS / 1000.0;
         Pattern attackPattern = Pattern.compile("team (?<name>.+) attack (?<x>\\d+),(?<y>\\d+)");
         Pattern radarPattern = Pattern.compile("team (?<name>.+) radar (?<x>\\d+),(?<y>\\d+)");
         Pattern aircraftPattern = Pattern.compile("team (?<name>.+) aircraft (?<row>\\d+)");
 
-        resizeEvents(timer+1);
+//        resizeEvents(timer+1);
         while (!events.get(timer).isEmpty()) {
             String query = events.get(timer).remove();
             Matcher attackMatcher = attackPattern.matcher(query);
@@ -98,13 +102,13 @@ public class GameEngine {
      * @param time the time which the event will happen in
      * @param event the input event
      */
-    void addEvent(int time, String event) {
+    void addEvent(double time, String event) {
         time += timer;
         resizeEvents(time+1);
         events.get(time).add(event);
     }
 
-    public ArrayList<Queue<String>> getEvents() {
+    public ArrayList<LinkedList<String>> getEvents() {
         return events;
     }
 

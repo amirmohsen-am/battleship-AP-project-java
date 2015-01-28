@@ -9,7 +9,6 @@ import battleship.exception.GameOverException;
 import battleship.exception.NoMoreInputException;
 import battleship.position.EquipmentPosition;
 import battleship.position.Position;
-import sun.nio.ch.Net;
 
 import java.io.IOException;
 import java.util.ArrayList;
