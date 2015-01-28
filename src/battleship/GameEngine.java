@@ -30,7 +30,8 @@ public class GameEngine {
 
     private Player[] players;
     private double timer;
-    private SortedMap<Double, LinkedList<String>> events = new HashMap<>();
+    private SortedMap<Double, LinkedList<String>> events = new SortedMap<Double, LinkedList<String>>() {
+    };
     private GameController controller;
 
     public GameEngine(Player[] players, GameController controller) {
