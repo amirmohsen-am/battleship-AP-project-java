@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  */
 public class ConsoleInput {
     private GameController controller;
-    private Scanner scanner;
+    private Scanner gameInput;
     Log log;
 
     int startWidth = 0, endWidth; // baz baste boodan dar JavaDoc
@@ -29,8 +29,8 @@ public class ConsoleInput {
 
 
 
-    public ConsoleInput(Scanner scanner, GameController controller, Log log) {
-        this.scanner = scanner;
+    public ConsoleInput(Scanner gameInput, GameController controller, Log log) {
+        this.gameInput = gameInput;
         this.controller = controller;
         this.log = log;
     }
@@ -40,9 +40,9 @@ public class ConsoleInput {
      * @throws Exception if the game is not over, but there's no more input
      */
     public void next() throws NoMoreInputException, IOException, GameOverException {
-        if (!scanner.hasNext())
+        if (!gameInput.hasNext())
             throw new NoMoreInputException();
-        String input = scanner.nextLine();
+        String input = gameInput.nextLine();
         input = input.toLowerCase();
         if (input.contains("go")) {
             int number = Integer.parseInt(input.substring(3));
@@ -59,42 +59,42 @@ public class ConsoleInput {
 
     /** Reads the names and map of players
      *
-     * @param console the scanner to read from
+     * @param mapInput the gameInput to read from
      * @return the read players
      */
-    public Player[] getPlayers(Scanner console) throws IOException {
+    public Player[] getPlayers(Scanner mapInput) throws IOException {
         Player[] players = new Player[2];
-        endHeight = console.nextInt()-1;
-        endWidth = console.nextInt()-1;
-        console.nextLine();
+        endHeight = mapInput.nextInt()-1;
+        endWidth = mapInput.nextInt()-1;
+        mapInput.nextLine();
 
         for (int i = 0; i < 2; i++) {
-//            String input = console.nextLine();
+//            String input = mapInput.nextLine();
 //            Matcher matcher = Pattern.compile("Player number (\\d+), please build your map").matcher(input);
             log.println("Player number " + (i+1) + ", please build your map");
             String name = "" + ((char)(((int)'a')+i));
-            players[i] = new Player(name, getMap(console));
+            players[i] = new Player(name, getMap(mapInput));
         }
         return players;
     }
     
     /** Reads the map of a player
      *
-     * @param console the scanner to read from
+     * @param mapInput the gameInput to read from
      * @return the read map
      */
-    Map getMap(Scanner console) throws IOException {
+    Map getMap(Scanner mapInput) throws IOException {
         ArrayList<Equipment> equipments = new ArrayList<Equipment>();
-        getShips(console, equipments);
+        getShips(mapInput, equipments);
 //        System.err.println("Ships reading done");
         boolean done = false;
-        while (console.hasNext()) {
-            String input = console.nextLine();
+        while (mapInput.hasNext()) {
+            String input = mapInput.nextLine();
             input = input.toLowerCase();
             if (input.equals("anti aircraft")) {
-                getAntiAircraft(console, equipments);
+                getAntiAircraft(mapInput, equipments);
             } else if (input.equals("mine")) {
-                getMine(console, equipments);
+                getMine(mapInput, equipments);
             } else if (input.equals("done")) {
                 done = true;
                 break;
@@ -116,14 +116,14 @@ public class ConsoleInput {
 
     /** Reads an antiAircraft
      *
-     * @param console the scanner to read from
+     * @param mapInput the gameInput to read from
      * @param equipments list of equipments to append the read antiAircraft
      */
-    void getAntiAircraft(Scanner console, ArrayList<Equipment> equipments) {
+    void getAntiAircraft(Scanner mapInput, ArrayList<Equipment> equipments) {
         int count = 0;
-        while (console.hasNextInt()) {
-            int row = console.nextInt();
-            console.nextLine();
+        while (mapInput.hasNextInt()) {
+            int row = mapInput.nextInt();
+            mapInput.nextLine();
             if (count >= GameEngine.ANTIAIRCRAFT_COUNT)
                 return;
             equipments.add(new AntiAircraft(row));
@@ -133,14 +133,14 @@ public class ConsoleInput {
 
     /** Reads a mine
      *
-     * @param console the scanner to read from
+     * @param mapInput the gameInput to read from
      * @param equipments list of equipments to append the read mine
      */
-    void getMine(Scanner console, ArrayList<Equipment> equipments) throws IOException {
+    void getMine(Scanner mapInput, ArrayList<Equipment> equipments) throws IOException {
         int count = 0;
         Pattern minePattern = Pattern.compile("(?<x>\\d+),(?<y>\\d+)");
-        while (console.hasNext(minePattern)) {
-            String input  = console.nextLine();
+        while (mapInput.hasNext(minePattern)) {
+            String input  = mapInput.nextLine();
             input = input.toLowerCase();
             Matcher matcher = minePattern.matcher(input);
             int x, y;
@@ -159,13 +159,13 @@ public class ConsoleInput {
 
     /** Reads all the ships of a player
      *
-     * @param console the scanner to read from
+     * @param mapInput the gameInput to read from
      * @param equipments list of equipments to append the read ships
      */
-    void getShips(Scanner console, ArrayList<Equipment> equipments) throws IOException {
+    void getShips(Scanner mapInput, ArrayList<Equipment> equipments) throws IOException {
         int[] shipLengths = GameEngine.SHIP_LENGTHS;
         for (int shipLength : shipLengths) {
-            String input = console.nextLine();
+            String input = mapInput.nextLine();
             input = input.toLowerCase();
             Matcher matcher = Pattern.compile("(?<x>\\d+),(?<y>\\d+) (?<direction>h|v)").matcher(input);
             if (matcher.find()) {

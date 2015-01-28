@@ -6,10 +6,17 @@ import battleship.equipment.Mine;
 import battleship.equipment.Ship;
 import battleship.exception.GameOverException;
 import battleship.exception.NoMoreInputException;
+import battleship.frame.PlayingFrame;
+import battleship.graphic.Graphic;
+import battleship.graphic.GraphicObject;
+import battleship.graphic.image.GameImages;
 import battleship.position.Position;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /** Controls the relation between GameEngine and I/O
  *
@@ -17,9 +24,13 @@ import java.util.ArrayList;
  */
 public class GameController {
 
+    private Graphic[] graphic;
     private GameEngine engine;
     private Log log;
     private ConsoleInput consoleInput;
+
+    boolean gameHasEnded = false;
+    PlayingFrame playingFrame;
 
     /** Initializes the engine, log and consoleInput and also sets controller and owner of all the equipments of the players
      *
@@ -27,23 +38,51 @@ public class GameController {
      * @param log the Log
      * @param consoleInput the consoleInput
      */
-    public void init(GameEngine engine, Log log, ConsoleInput consoleInput) {
+    public void init(final GameEngine engine, Log log, ConsoleInput consoleInput, PlayingFrame playingFrame) {
         this.engine = engine;
         this.log = log;
         this.consoleInput = consoleInput;
+        this.playingFrame = playingFrame;
+        this.graphic = new Graphic[2];
+        graphic[0] = engine.getPlayers()[0].getGraphic();
+        graphic[1] = engine.getPlayers()[1].getGraphic();
+
         for (Player player : engine.getPlayers()) {
             for (Equipment equipment : player.getMap().getEquipments()) {
                 equipment.setController(this);
                 equipment.setOwner(player);
             }
             player.getMap().setOwner(player);
-        }
+        };
+        playingFrame.init(this, engine);
+    }
 
+    public ConsoleInput getConsoleInput() {
+        return consoleInput;
+    }
+
+    public Graphic[] getGraphic() {
+        return graphic;
     }
 
     /** Starts and continues the game up to an ending point*/
     public void start() throws IOException {
-        boolean gameHasEnded = false;
+        gameHasEnded = false;
+        Thread paintThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!gameHasEnded) {
+                    playingFrame.repaint();
+                    try {
+                        Thread.sleep(1000 / Graphic.FPS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        paintThread.start();
+
         while (!gameHasEnded) {
             try {
                 consoleInput.next();
@@ -97,6 +136,8 @@ public class GameController {
      */
     public void reportShipCellExplode(Position targetPosition, Player attackedPlayer) {
         log.println("team " + engine.getOpponent(attackedPlayer).getName() + " explode " +  targetPosition.getString());
+        attackedPlayer.getGraphic().addGraphicObject(new GraphicObject(
+                targetPosition, GameImages.ExplodeAnimation, GameImages.ExplodeAnimationSpeed, false) );
     }
 
     /** Reports complete explosion of a ship

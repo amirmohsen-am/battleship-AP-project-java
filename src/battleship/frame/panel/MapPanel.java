@@ -13,14 +13,15 @@ import java.awt.*;
  */
 public class MapPanel extends JPanel {
     Graphic graphic;
+    int WIDTH, HEIGHT;
 
     public void init(Graphic graphic) {
         this.graphic = graphic;
 
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        setFocusable(true);
-        requestFocus();
-        setPreferredSize(new Dimension(Map.getWidth() * Graphic.CELL_WIDTH , Map.getHeight() * Graphic.CELL_HEIGHT));
+        WIDTH = Map.getWidth() * Graphic.CELL_WIDTH + 1;
+        HEIGHT = Map.getHeight() * Graphic.CELL_HEIGHT + 1;
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
     }
 
     @Override
@@ -30,12 +31,20 @@ public class MapPanel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2d.fillRect(0, 0, WIDTH, HEIGHT);
+        //g2d.fillRect(0, 0, WIDTH, HEIGHT);
         for (GraphicObject o : graphic.getGraphicObjects()) {
             Position imagePosition = o.getTopLeftGraphicPosition();
             g2d.drawImage(o.getCurrentImage().getImage(), imagePosition.x, imagePosition.y, o.getWidth(), o.getHeight(), null);
         }
+        paintGrid(g2d);
 //        g2d.scale(1,-1);
+    }
+
+    private void paintGrid(Graphics2D g2d) {
+        for (int i = 0; i <= Map.getHeight(); i++)
+            g2d.drawLine(0, i*Graphic.CELL_HEIGHT, Map.getWidth()*Graphic.CELL_WIDTH, i*Graphic.CELL_HEIGHT);
+        for (int j = 0; j <= Map.getWidth(); j++)
+            g2d.drawLine(j*Graphic.CELL_WIDTH, 0, j*Graphic.CELL_WIDTH, Map.getHeight()*Graphic.CELL_HEIGHT);
     }
 
 }

@@ -22,13 +22,9 @@ public class Map {
     /** The Player variable must be set in initialization*/
     private Player owner = null;
     private ArrayList<Equipment> equipments;
-    private Graphic graphic;
     boolean isVisible[][];
     boolean isBlown[][];
 
-    public void setGraphic(Graphic graphic) {
-        this.graphic = graphic;
-    }
 
     /** These variables are in [) (include-excluded) format*/
     public static int startWidth = -1, endWidth;
@@ -154,7 +150,7 @@ public class Map {
     }
     public void addEquipment(Equipment equipment, GameImage gameImage) {
         equipments.add(equipment);
-        graphic.addGraphicObject(new GraphicObject(
+        owner.getGraphic().addGraphicObject(new GraphicObject(
                 equipment.getPositions().get(0),
                 Graphic.getMiddleGraphicPosition(equipment.getPositions()),
                 gameImage));

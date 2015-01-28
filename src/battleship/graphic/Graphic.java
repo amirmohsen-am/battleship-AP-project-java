@@ -12,8 +12,10 @@ import java.util.ArrayList;
 public class Graphic {
 
     // has to be odd
-    public static final int CELL_WIDTH = 61;
-    public static final int CELL_HEIGHT = 61;
+    public static final int CELL_WIDTH = 31;
+    public static final int CELL_HEIGHT = 31;
+
+    public static final int FPS = 30;
 
     /** Returns MIDDLE of cell with given column and row
      *
@@ -59,16 +61,32 @@ public class Graphic {
         return true;
     }
 
-    public Graphic() {
-    }
-
     private ArrayList<GraphicObject> graphicObjects = new ArrayList<GraphicObject>();
 
     public ArrayList<GraphicObject> getGraphicObjects() {
         return graphicObjects;
     }
-    public void addGraphicObject(GraphicObject graphicObject) {
+
+
+    public void addGraphicObject(final GraphicObject graphicObject) {
         graphicObjects.add(graphicObject);
+        if (graphicObject.speedMS != 0) {
+            final Thread newThread = new Thread(graphicObject);
+            newThread.start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        newThread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    graphicObjects.remove(graphicObject);
+                }
+            }).start();
+        }
     }
+
+
 
 }

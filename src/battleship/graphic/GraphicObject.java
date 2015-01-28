@@ -8,23 +8,51 @@ import javax.swing.*;
 /**
  * Created by persianpars on 1/24/15.
  */
-public class GraphicObject {
+public class GraphicObject implements Runnable {
     Position mapPosition, middleGraphicPosition;
     GameImage gameImage;
 
-
     int imageIndex = 0;
+    int speedMS = 0;
+    boolean loop = false;
 
 //    public GraphicObject(Position middleGraphicPosition, GameImage gameImage) {
 //        this.middleGraphicPosition = middleGraphicPosition;
 //        this.gameImage = gameImage;
 //    }
 
-    public GraphicObject(Position mapPosition, Position middleGraphicPosition, GameImage gameImage) {
+    public GraphicObject(Position mapPosition, Position middleGraphicPosition, GameImage gameImage, int speedMS, boolean loop) {
         this.middleGraphicPosition = middleGraphicPosition;
         this.mapPosition = mapPosition;
         this.gameImage = gameImage;
+        this.speedMS = speedMS;
+        this.loop = loop;
     }
+
+    public GraphicObject(Position mapPosition, Position middleGraphicPosition, GameImage gameImage, int speedMS) {
+        this(mapPosition, middleGraphicPosition, gameImage, speedMS, false);
+    }
+
+
+    public GraphicObject(Position mapPosition, Position middleGraphicPosition, GameImage gameImage) {
+        this(mapPosition, middleGraphicPosition, gameImage, 0);
+    }
+
+
+    public GraphicObject(Position mapPosition, GameImage gameImage, int speedMS) {
+        this(mapPosition, Graphic.getMiddleGraphicPosition(mapPosition), gameImage, speedMS);
+    }
+
+    public GraphicObject(Position mapPosition, GameImage gameImage, int speedMS, boolean loop) {
+        this(mapPosition, Graphic.getMiddleGraphicPosition(mapPosition), gameImage, speedMS, loop);
+    }
+
+
+    public GraphicObject(Position mapPosition, GameImage gameImage) {
+        this(mapPosition, gameImage, 0);
+    }
+
+
 
     public void setGameImage(GameImage gameImage) {
         this.gameImage = gameImage;
@@ -54,6 +82,9 @@ public class GraphicObject {
         return new Position(middleGraphicPosition.x - gameImage.getWidth()/2, middleGraphicPosition.y - gameImage.getHeight()/2);
     }
 
+    public void setMiddleGraphicPosition(Position middleGraphicPosition) {
+        this.middleGraphicPosition = middleGraphicPosition;
+    }
 
     public void goUpOneRow() {
         addDimension(0, -1);
@@ -85,4 +116,21 @@ public class GraphicObject {
 
     }
 
+    @Override
+    public void run() {
+        while (speedMS != 0) {
+            imageIndex++;
+            if (imageIndex >= gameImage.getImages().length) {
+                if (loop)
+                    imageIndex = 0;
+                else
+                    break;
+            }
+            try {
+                Thread.sleep(speedMS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
