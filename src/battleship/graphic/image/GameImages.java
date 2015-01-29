@@ -19,9 +19,10 @@ public class GameImages {
     public static GameImage ExplodeAnimation;
     public static GameImage VisibleCell;
     public static GameImage Cloud;
+    public static GameImage DestroyedCell;
 
     public static int ExplodeAnimationSpeed = 100;
-    public static int CloudSpeed = 100;
+    public static int CloudSpeed = 800;
 
     public static ArrayList<GameImage> gameImageArrayList = new ArrayList<GameImage>();
 
@@ -42,7 +43,9 @@ public class GameImages {
         ExplodeAnimation = new GameImage("Explosion", "Explosion", Graphic.CELL_WIDTH+10, Graphic.CELL_HEIGHT+10);
 
         VisibleCell = new GameImage("VisibleCell", "VisibleCell");
-        Cloud = new GameImage("Cloud", "Cloud", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
+        Cloud = new GameImage("Cloud", "Cloud", Graphic.CELL_WIDTH*3/2, Graphic.CELL_HEIGHT*3/2);
+
+        DestroyedCell = new GameImage("DestroyedCell", "DestroyedCell", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
 
 //        gameImageArrayList.add(Mine);
 //        gameImageArrayList.add(AntiAircraft);

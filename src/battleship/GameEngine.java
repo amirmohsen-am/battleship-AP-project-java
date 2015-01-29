@@ -4,6 +4,7 @@ import battleship.exception.GameOverException;
 import battleship.position.Position;
 
 import java.util.*;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,8 +31,7 @@ public class GameEngine {
 
     private Player[] players;
     private double timer;
-    private SortedMap<Double, LinkedList<String>> events = new SortedMap<Double, LinkedList<String>>() {
-    };
+    private TreeSet<Event> events = new TreeSet<>();
     private GameController controller;
 
     public GameEngine(Player[] players, GameController controller) {
@@ -63,8 +63,10 @@ public class GameEngine {
         Pattern aircraftPattern = Pattern.compile("team (?<name>.+) aircraft (?<row>\\d+)");
 
 //        resizeEvents(timer+1);
-        while (!events.get(timer).isEmpty()) {
-            String query = events.get(timer).remove();
+        if (!events.isEmpty()) {
+
+            String query = events.first().command;
+            events.remove(events.first());
             Matcher attackMatcher = attackPattern.matcher(query);
             Matcher radarMatcher = radarPattern.matcher(query);
             Matcher aircraftMatcher = aircraftPattern.matcher(query);
@@ -105,13 +107,14 @@ public class GameEngine {
      */
     void addEvent(double time, String event) {
         time += timer;
-        resizeEvents(time+1);
-        events.get(time).add(event);
+//        resizeEvents(time+1);
+//        events.get(time).add(event);
+        events.add(new Event(time, event));
     }
 
-    public ArrayList<LinkedList<String>> getEvents() {
-        return events;
-    }
+//    public ArrayList<LinkedList<String>> getEvents() {
+//        return events;
+//    }
 
 
     /** Returns the opponent of the given player

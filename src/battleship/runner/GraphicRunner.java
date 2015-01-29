@@ -1,8 +1,6 @@
 package battleship.runner;
 
 import battleship.*;
-import battleship.Network.Client;
-import battleship.Network.Network;
 import battleship.Network.NetworkOutputStream;
 import battleship.Network.NetworkInputStream;
 import battleship.Network.Server;
@@ -24,16 +22,21 @@ public class GraphicRunner {
         Log log;
         log = new Log(true, "out.txt");
 
-        Server server = new Server();
-        NetworkInputStream getter = new NetworkInputStream(server);
-        NetworkOutputStream[] sender = new NetworkOutputStream[2];
-        for (int i = 0; i < 2; i++)
-            sender[i] = new NetworkOutputStream(server);
+//        Server server = new Server();
+//        NetworkInputStream getter;
+//        getter = new NetworkInputStream(server);
+        NetworkOutputStream[] sender;
+        sender = new NetworkOutputStream[2];
+//        for (int i = 0; i < 2; i++)
+//            sender[i] = new NetworkOutputStream(server);
+
+        Scanner getter = new Scanner(System.in);
 
         GameController controller = new GameController();
         GameEngine engine = new GameEngine(getPlayers(), controller);
 
-        ConsoleInput consoleInput = new ConsoleInput(new Scanner(System.in), controller, log);
+        ConsoleInput consoleInput = new ConsoleInput(getter, controller, log);
+
 
         PlayingFrame playingFrame = new PlayingFrame(sender);
 //        playingFrame.init(controller, engine);

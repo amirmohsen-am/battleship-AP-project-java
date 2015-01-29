@@ -79,61 +79,11 @@ public class PlayingFrame extends JFrame {
             playerPanel[i].add(mapPanel[i]);
             playerPanel[i].add(informationPanel[i]);
         }
-        KeyListener keyListener = new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_W:
-                        cursor[1].goUpOneRow();
-                        break;
-                    case KeyEvent.VK_S:
-                        cursor[1].goDownOneRow();
-                        break;
-                    case KeyEvent.VK_A:
-                        cursor[1].goLeftOneColumn();
-                        break;
-                    case KeyEvent.VK_D:
-                        cursor[1].goRightOneColumn();
-                        break;
-                    case KeyEvent.VK_I:
-                        cursor[0].goUpOneRow();
-                        break;
-                    case KeyEvent.VK_K:
-                        cursor[0].goDownOneRow();
-                        break;
-                    case KeyEvent.VK_J:
-                        cursor[0].goLeftOneColumn();
-                        break;
-                    case KeyEvent.VK_L:
-                        cursor[0].goRightOneColumn();
-                        break;
-                    case KeyEvent.VK_F:
-                        String text = ButtonSelected.getSelectedButtonText(informationPanel[0].buttonGroup);
-                        switch (text) {
-                            case "Attack":
-                                sender[0].send(engine.getTimer() + " " + ConsoleOutput.attack(players[0], cursor[0].getMapPosition()));
-                                break;
-                            case "Radar":
-                                sender[0].send(engine.getTimer() + " " + ConsoleOutput.radar(players[0], cursor[0].getMapPosition()));
-                                break;
-                            case "Aircraft":
-                                sender[0].send(engine.getTimer() + " " + ConsoleOutput.aircraft(players[0], cursor[0].getMapPosition().y));
-                                break;
-                        }
-                }
-            }
+        Player1KeyListener player1KeyListener = new Player1KeyListener(this, cursor[1]);
+        Player2KeyListener player2KeyListener = new Player2KeyListener(this, cursor[0]);
 
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        };
-        mainPanel.addKeyListener(keyListener);
+        mainPanel.addKeyListener(player1KeyListener);
+        mainPanel.addKeyListener(player2KeyListener);
 
 
         mainPanel.add(playerPanel[0]);
@@ -167,7 +117,7 @@ public class PlayingFrame extends JFrame {
         }
     }
 
-    private class InformationPanel extends JPanel {
+    protected class InformationPanel extends JPanel {
         JRadioButton attackButton;
         JRadioButton radarButton;
         JRadioButton aircraftButton;

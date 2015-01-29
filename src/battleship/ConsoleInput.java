@@ -1,6 +1,6 @@
 package battleship;
 
-import battleship.Network.Network;
+import battleship.Network.NetworkInputStream;
 import battleship.equipment.AntiAircraft;
 import battleship.equipment.Equipment;
 import battleship.equipment.Mine;
@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
  */
 public class ConsoleInput {
     private GameController controller;
+//    private NetworkInputStream gameInput;
     private Scanner gameInput;
     Log log;
 
@@ -30,6 +31,7 @@ public class ConsoleInput {
 
 
 
+//    public ConsoleInput(NetworkInputStream gameInput, GameController controller, Log log) {
     public ConsoleInput(Scanner gameInput, GameController controller, Log log) {
         this.gameInput = gameInput;
         this.controller = controller;
