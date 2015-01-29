@@ -127,7 +127,7 @@ public class GetPlayerFrame extends JFrame {
                         }
                         if (informationPanel.antiAircraftButton.isSelected() && antiCount <= GameEngine.ANTIAIRCRAFT_MAX) {
                             antiCount++;
-                            map.addEquipment(new AntiAircraft(cursor.getMapPosition()), GameImages.AntiAircraft);
+                            map.addEquipment(new AntiAircraft(cursor.getMapPosition().y), GameImages.AntiAircraft);
                         }
                         break;
                 }

@@ -145,7 +145,7 @@ public class Map implements Serializable{
         if (owner.getAirCraftUsed() >= GameEngine.AIRCRAFT_MAX_USES)
             return;
         owner.incrementAirCraftUsed();
-        Position targetPosition = new Position(1, targetRow);
+        Position targetPosition = new Position(Map.startWidth, targetRow);
         for (Equipment equipment : equipments) {
             if (equipment instanceof AntiAircraft && equipment.contains(targetPosition) && !equipment.isBlown(targetPosition)) {
                 ((AntiAircraft) equipment).destroy();
@@ -159,8 +159,14 @@ public class Map implements Serializable{
             }
         }
         // there is no antiaircraft in this row
-        for (int x = startWidth; x <= endWidth; x++)
+        for (int x = startWidth; x <= endWidth; x++) {
             controller.attack(new Position(x, targetRow), controller.getEngine().getOpponent(owner));
+            try {
+                Thread.sleep(GameImages.AircraftAttackSpeed);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /** Uses radar to identify equipments near a given position

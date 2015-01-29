@@ -207,16 +207,27 @@ public class GameController {
      */
     public void reportAircraftHit(AntiAircraft antiAircraft) {
         log.println("aircraft unsuccessful");
+        antiAircraft.getOwner().getGraphic().addGraphicObject(new GraphicObject(
+                antiAircraft.getPosition(), GameImages.ExplodeAnimation, GameImages.ExplodeAnimationSpeed, false));
 
 
     }
 
+    public void reportAircraftSuccessful(AntiAircraft antiAircraft) {
+        log.println("aircraft successful");
+        antiAircraft.getOwner().getGraphic().addGraphicObject(new GraphicObject(
+                antiAircraft.getPosition(), GameImages.ExplodeAnimation, GameImages.ExplodeAnimationSpeed, false));
+
+
+    }
     /** Reports explosion of an antiAircraft that has benn hit directly
      *
      * @param antiAircraft the antiAircraft that has been exploded
      */
     public void reportAntiAircraftHitDirectly(AntiAircraft antiAircraft) {
         log.println("team " + antiAircraft.getOwner().getName() + " anti aircraft row " + antiAircraft.getRow() + " exploded");
+        antiAircraft.getOwner().getGraphic().addGraphicObject(new GraphicObject(
+                antiAircraft.getPosition(), GameImages.ExplodeAnimation, GameImages.ExplodeAnimationSpeed, false));
 
     }
 

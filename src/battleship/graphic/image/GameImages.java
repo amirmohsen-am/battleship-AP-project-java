@@ -22,6 +22,7 @@ public class GameImages implements Serializable {
     public static GameImage VisibleCell;
     public static GameImage Cloud;
     public static GameImage DestroyedCell;
+    public static GameImage Aircraft;
 
     public static GameImage RadarAnimation;
     public static GameImage Fire;
@@ -33,6 +34,7 @@ public class GameImages implements Serializable {
     public static int RadarSpeed = 140;
     public static int SeaSpeed = 100;
     public static int AircraftSpeed = 50;
+    public static int AircraftAttackSpeed = 200;
 
     public static ArrayList<GameImage> gameImageArrayList = new ArrayList<GameImage>();
 
@@ -52,7 +54,7 @@ public class GameImages implements Serializable {
 
         ExplodeAnimation = new GameImage("Explosion", "Explosion", Graphic.CELL_WIDTH+10, Graphic.CELL_HEIGHT+10);
         RadarAnimation = new GameImage("Radar", "Radar", Graphic.CELL_WIDTH * 3, Graphic.CELL_HEIGHT * 3);
-        Fire = new GameImage("Fire", "Fire", Graphic.CELL_WIDTH + 10, Graphic.CELL_HEIGHT + 10);
+        Fire = new GameImage("Fire", "Fire", Graphic.CELL_WIDTH*3/2, Graphic.CELL_HEIGHT*3/2);
 
         VisibleCell = new GameImage("VisibleCell", "VisibleCell");
         Cloud = new GameImage("Cloud", "Cloud", Graphic.CELL_WIDTH*3/2, Graphic.CELL_HEIGHT*3/2);
@@ -60,6 +62,8 @@ public class GameImages implements Serializable {
         DestroyedCell = new GameImage("DestroyedCell", "DestroyedCell", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
 
         Sea = new GameImage("Sea", "Sea", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
+
+        Aircraft = new GameImage("Aircraft", "Aircraft", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
 
 
 //        gameImageArrayList.add(Mine);
@@ -85,6 +89,7 @@ public class GameImages implements Serializable {
         }
 
     }
+
 
 
 

@@ -27,8 +27,11 @@ public class GraphicRunner {
         getter = new NetworkClient(ipAddress, 3109);
         NetworkClient[] sender;
         sender = new NetworkClient[2];
-        for (int i = 0; i < 2; i++)
-            sender[i] = new NetworkClient(ipAddress, 3109);
+        if (!online)
+            for (int i = 0; i < 2; i++)
+                sender[i] = new NetworkClient(ipAddress, 3109);
+        else
+            sender[playerNumber] = new NetworkClient(ipAddress, 3109);
 
 //        Scanner getter = new Scanner(System.in);
 

@@ -1,6 +1,7 @@
 package battleship.equipment;
 
 import battleship.GameController;
+import battleship.Map;
 import battleship.Player;
 import battleship.position.EquipmentPosition;
 import battleship.position.Position;
@@ -22,7 +23,7 @@ public class AntiAircraft extends Equipment {
 
     public AntiAircraft(int row) {
         super();
-        position = new EquipmentPosition(1, row);
+        position = new EquipmentPosition(Map.startWidth, row);
     }
 
     public AntiAircraft(Position position) {
