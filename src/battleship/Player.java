@@ -2,11 +2,13 @@ package battleship;
 
 import battleship.graphic.Graphic;
 
+import java.io.Serializable;
+
 /** A player of the game
  *
  * @author Ahanchi
  */
-public class Player {
+public class Player implements Serializable{
     private String name;
     private Map map;
     private int radarUsed = 0;

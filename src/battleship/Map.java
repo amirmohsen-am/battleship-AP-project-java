@@ -12,13 +12,14 @@ import battleship.position.EquipmentPosition;
 import battleship.position.Position;
 import javafx.geometry.Pos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /** The Map of a player
  *
  * @author Ahanchi
  */
-public class Map {
+public class Map implements Serializable{
     private GameController controller = null;
     /** The Player variable must be set in initialization*/
     private Player owner = null;

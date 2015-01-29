@@ -6,11 +6,12 @@ import battleship.graphic.image.GameImage;
 import battleship.position.Position;
 
 import javax.swing.*;
+import java.io.Serializable;
 
 /**
  * Created by persianpars on 1/24/15.
  */
-public class GraphicObject implements Runnable {
+public class GraphicObject implements Runnable, Serializable {
     Position mapPosition, middleGraphicPosition;
     GameImage gameImage;
 

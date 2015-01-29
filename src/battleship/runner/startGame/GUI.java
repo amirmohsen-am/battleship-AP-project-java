@@ -1,9 +1,19 @@
-package battleship.startGame;
+package battleship.runner.startGame;
+
+import battleship.Map;
+import battleship.Network.Server;
+import battleship.Player;
+import battleship.frame.GetMapDimensionFrame;
+import battleship.frame.GetPlayerFrame;
+import battleship.graphic.Graphic;
+import battleship.position.Position;
+import battleship.runner.GraphicRunner;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +26,7 @@ public class GUI {
     private int state;
 
 
-    void start() {
+    public void start() {
    /*     javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
@@ -61,7 +71,12 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GUI.this.mainFrame.dispose();
-                GUI.this.startSingleplayerGame();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        GUI.this.startOfflineGame();
+                    }
+                });
             }
         });
         return button;
@@ -133,7 +148,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GUI.this.networkFrame.dispose();
-                GUI.this.startMultiplayerGame();
+                GUI.this.startOnlineGame();
             }
         });
         mainPanel.add(button);
@@ -144,18 +159,52 @@ public class GUI {
         networkFrame.setVisible(true);
     }
 
-    public void startMultiplayerGame() {
+    public void startOnlineGame() {
         int portNumber = Integer.parseInt(portField.getText());
-        String IPAdress = ipField.getText();
-        Network network;
-        if(state==1) {
-            network = new Server(IPAdress, portNumber);
-        } else {
-            network = new Client(IPAdress, portNumber);
+        String IPAddress = ipField.getText();
+        Player[] players = new Player[2];
+        if (state == 1) {
+            Server server = new Server();
+//            Position dimension = new GetMapDimensionFrame().init();
+            Position dimension = new Position(10, 10);
+            Map.startHeight = Map.startWidth = 0;
+            Map.endWidth = dimension.x-1;
+            Map.endHeight = dimension.y-1;
+
+            players[0] = new GetPlayerFrame().init(0);
+            players[1] = new GetPlayerFrame().init(0);
+            try {
+                GraphicRunner.main(IPAddress, true, 0, players);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        else {
+
+            players[0] = new GetPlayerFrame().init(0);
+            players[1] = new GetPlayerFrame().init(0);
+            try {
+                GraphicRunner.main(IPAddress, true, 1, players);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
     }
 
-    public void startSingleplayerGame() {
+    public void startOfflineGame() {
+//        Position dimension = new GetMapDimensionFrame().init();
+        Position dimension = new Position(10, 10);
+        Map.startHeight = Map.startWidth = 0;
+        Map.endWidth = dimension.x-1;
+        Map.endHeight = dimension.y-1;
+        Server server = new Server();
+        try {
+            GraphicRunner.main("127.0.0.1", false, 0, GraphicRunner.getPlayers());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

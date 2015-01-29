@@ -6,13 +6,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class GameImage {
+public class GameImage implements Serializable {
     String name;
     String path;
     ImageIcon[] images;

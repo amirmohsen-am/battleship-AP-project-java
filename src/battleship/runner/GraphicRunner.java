@@ -15,35 +15,32 @@ import java.util.Scanner;
  * Created by persianpars on 1/25/15.
  */
 public class GraphicRunner {
-    public static void main(String[] args) throws IOException {
-        Map.startHeight = Map.startWidth = 0;
-        Map.endWidth = Map.endHeight = 10;
+    public static void main(String ipAddress, boolean online, int playerNumber, Player[] players) throws IOException {
+//        Map.startHeight = Map.startWidth = 0;
+//        Map.endWidth = Map.endHeight = 10;
 //        GetMapFrame getMapFrame = new GetMapFrame();
 //        getMapFrame.init();
         Log log;
         log = new Log(true, "out.txt");
 
-
-        Server server = new Server();
-
         NetworkClient getter;
-        getter = new NetworkClient();
+        getter = new NetworkClient(ipAddress, 3109);
         NetworkClient[] sender;
         sender = new NetworkClient[2];
         for (int i = 0; i < 2; i++)
-            sender[i] = new NetworkClient();
+            sender[i] = new NetworkClient(ipAddress, 3109);
 
 //        Scanner getter = new Scanner(System.in);
 
         GameController controller = new GameController();
-        GameEngine engine = new GameEngine(getPlayers(), controller);
+        GameEngine engine = new GameEngine(players, controller);
 
         ConsoleInput consoleInput = new ConsoleInput(getter, controller, log);
 
 
         PlayingFrame playingFrame = new PlayingFrame(sender);
 //        playingFrame.init(controller, engine);
-        controller.init(engine, log, consoleInput, playingFrame);
+        controller.init(engine, log, consoleInput, playingFrame, online, playerNumber);
         controller.start();
     }
 

@@ -2,13 +2,14 @@ package battleship.graphic.image;
 
 import battleship.graphic.Graphic;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
  * Created by persianpars on 1/25/15.
  */
-public class GameImages {
+public class GameImages implements Serializable {
     public static GameImage[] ShipH = new GameImage[4];
     public static GameImage[] ShipV = new GameImage[4];
     public static GameImage Mine;

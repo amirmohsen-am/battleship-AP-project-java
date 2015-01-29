@@ -39,7 +39,7 @@ public class GameController {
      * @param log the Log
      * @param consoleInput the consoleInput
      */
-    public void init(final GameEngine engine, Log log, ConsoleInput consoleInput, final PlayingFrame playingFrame) {
+    public void init(final GameEngine engine, Log log, ConsoleInput consoleInput, final PlayingFrame playingFrame, boolean online, int playerNumber) {
         this.engine = engine;
         this.log = log;
         this.consoleInput = consoleInput;
@@ -59,7 +59,7 @@ public class GameController {
 //        SwingUtilities.invokeLater(new Runnable() {
 //            @Override
 //            public void run() {
-                playingFrame.init(GameController.this, engine);
+                playingFrame.init(GameController.this, engine, online, playerNumber);
 //            }
 //        });
 
@@ -136,7 +136,9 @@ public class GameController {
      * @throws Exception if the equipment in that position is already attacked
      */
     public void attack(Position targetPosition, Player attackingPlayer) throws GameOverException {
+        engine.getOpponent(attackingPlayer).getMap().setVisible(targetPosition.x, targetPosition.y, true);
         engine.attack(targetPosition, attackingPlayer);
+
     }
 
     /** Runs a radar command to identify the equipments around a position

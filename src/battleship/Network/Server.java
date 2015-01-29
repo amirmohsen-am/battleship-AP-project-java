@@ -36,7 +36,7 @@ public class Server {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true) {
+                while(true) {;
                     try {
                         Thread.sleep(20);
                         Socket socket = myService.accept();

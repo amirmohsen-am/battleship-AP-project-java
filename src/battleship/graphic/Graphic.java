@@ -4,12 +4,13 @@ import battleship.Map;
 import battleship.position.EquipmentPosition;
 import battleship.position.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by persianpars on 1/24/15.
  */
-public class Graphic {
+public class Graphic implements Serializable{
 
     // has to be odd
     public static final int CELL_WIDTH = 51;

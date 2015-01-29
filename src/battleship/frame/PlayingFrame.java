@@ -37,21 +37,22 @@ public class PlayingFrame extends JFrame {
     MapPanel[] mapPanel = new MapPanel[2];
     public GameInfoPanel gameInfoPanel;
 
+    boolean online;
+    int playerNumber;
+
     PlayerInfoPanel[] playerInfoPanel = new PlayerInfoPanel[2];
 
     public PlayingFrame(NetworkClient sender[]) {
         this.sender = sender;
     }
 
-    public void init(final GameController controller, final GameEngine engine) {
+    public void init(final GameController controller, final GameEngine engine, boolean online, int playerNumber) {
         this.controller = controller;
         this.engine = engine;
         graphic = controller.getGraphic();
         players = engine.getPlayers();
-//        graphic = new Graphic[2];
-//        for (int i = 0; i < 2; i++) {
-//            graphic[i] = new Graphic();
-//        }
+        this.online = online;
+        this.playerNumber = playerNumber;
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -68,7 +69,7 @@ public class PlayingFrame extends JFrame {
         for (int i = 0; i < 2; i++) {
             mapPanel[i] = new MapPanel();
             cursor[i] = new GraphicObject(new Position(0, 0), GameImages.CursorAttack, 0, 10);
-            graphic[i].addGraphicObject(cursor[i]);
+
             mapPanel[i].init(players[i].getMap(), graphic[i]);
 
             playerInfoPanel[i] = new PlayerInfoPanel();
@@ -82,9 +83,19 @@ public class PlayingFrame extends JFrame {
         Player1KeyListener player1KeyListener = new Player1KeyListener(this, cursor[1]);
         Player2KeyListener player2KeyListener = new Player2KeyListener(this, cursor[0]);
 
-        mainPanel.addKeyListener(player1KeyListener);
-        mainPanel.addKeyListener(player2KeyListener);
-
+        if (online) {
+            graphic[playerNumber^1].addGraphicObject(cursor[playerNumber^1]);
+            if (playerNumber == 0)
+                mainPanel.addKeyListener(player1KeyListener);
+            else
+                mainPanel.addKeyListener(player2KeyListener);
+        }
+        else {
+            for (int i = 0; i < 2; i++)
+            graphic[i].addGraphicObject(cursor[i]);
+            mainPanel.addKeyListener(player1KeyListener);
+            mainPanel.addKeyListener(player2KeyListener);
+        }
 
         mainPanel.add(playerPanel[0]);
         mainPanel.add(new JSeparator(SwingConstants.VERTICAL));
@@ -144,20 +155,19 @@ public class PlayingFrame extends JFrame {
         }
 
     }
-}
-class GameInfoPanel extends JPanel {
-    JLabel timeLabel;
-    GameController controller;
-    GameEngine engine;
+    class GameInfoPanel extends JPanel {
+        JLabel timeLabel;
+        GameController controller;
+        GameEngine engine;
 
-    public void init(final GameController controller, GameEngine engine) {
-        this.engine = engine;
-        this.controller = controller;
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        public void init(final GameController controller, GameEngine engine) {
+            this.engine = engine;
+            this.controller = controller;
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 //            setPreferredSize(new Dimension(150, 100));
 
-        timeLabel = new JLabel("time: " + engine.getTimer());
+            timeLabel = new JLabel("time: " + engine.getTimer());
 //        JButton go = new JButton("Go");
 //        go.addActionListener(new ActionListener() {
 //            @Override
@@ -173,9 +183,9 @@ class GameInfoPanel extends JPanel {
 
 //        timeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 //        go.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(timeLabel);
+            add(timeLabel);
 //        add(go);
-    }
+        }
 
 //    @Override
 //    public void paintComponents(Graphics g) {
@@ -184,4 +194,6 @@ class GameInfoPanel extends JPanel {
 //        g2d.drawString("time: " + engine.getTimer(), 1, 10);
 //        timeLabel.setText("time: " + engine.getTimer());
 //    }
+    }
+
 }
