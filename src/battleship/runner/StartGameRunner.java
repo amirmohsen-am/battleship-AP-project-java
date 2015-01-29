@@ -36,12 +36,13 @@ public class StartGameRunner {
         else {
 
             Player[] players = new Player[2];
+            Position dimension = new Position(10, 10);
+            Map.startHeight = Map.startWidth = 0;
+            Map.endWidth = dimension.x-1;
+            Map.endHeight = dimension.y-1;
             if (string.equals("Create")) {
 //            Position dimension = new GetMapDimensionFrame().init();
-                Position dimension = new Position(10, 10);
-                Map.startHeight = Map.startWidth = 0;
-                Map.endWidth = dimension.x-1;
-                Map.endHeight = dimension.y-1;
+
 
                 Server server = new Server();
                 ServerPlayer serverPlayer = new ServerPlayer();
@@ -55,7 +56,9 @@ public class StartGameRunner {
                     }
                 }
 
+                System.out.println("here I am");
                 players[0] = new GetPlayerFrame().init(0);
+                System.out.println("asdasd");
 
                 client.sendPlayer(players[0]);
 //                players[1] = new GetPlayerFrame().init(0);
@@ -71,9 +74,9 @@ public class StartGameRunner {
                 String IPAddress = scanner.next();
   //              players[0] = new GetPlayerFrame().init(0);
 
-                NetworkClient client = new NetworkClient(IPAddress, 3121);
-
                 players[1] = new GetPlayerFrame().init(0);
+
+                NetworkClient client = new NetworkClient(IPAddress, 3121);
 
                 client.sendPlayer(players[1]);
 

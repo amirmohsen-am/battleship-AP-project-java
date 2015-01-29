@@ -6,13 +6,14 @@ import battleship.exception.GameOverException;
 import battleship.position.EquipmentPosition;
 import battleship.position.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /** Ship equipment of the game
  *
  * @author Ahanchi
  */
-public class Ship extends Equipment {
+public class Ship extends Equipment implements Serializable{
     private ArrayList<EquipmentPosition> positions;
 
     public Ship(Player owner, GameController controller, ArrayList<EquipmentPosition> positions) {
