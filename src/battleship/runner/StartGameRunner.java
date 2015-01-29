@@ -8,6 +8,7 @@ import battleship.Player;
 import battleship.frame.GetPlayerFrame;
 import battleship.position.Position;
 
+import javax.annotation.processing.SupportedSourceVersion;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
@@ -61,9 +62,20 @@ public class StartGameRunner {
                 System.out.println("asdasd");
 
                 client.sendPlayer(players[0]);
+
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
 //                players[1] = new GetPlayerFrame().init(0);
                 players[0] = client.readPlayer();
                 players[1] = client.readPlayer();
+
+                System.out.println("POOOOOOL");
+                System.exit(0);
+
                 try {
                     GraphicRunner.main("127.0.0.1", true, 0, players);
                 } catch (IOException e) {
@@ -80,8 +92,17 @@ public class StartGameRunner {
 
                 client.sendPlayer(players[1]);
 
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
                 players[0] = client.readPlayer();
                 players[1] = client.readPlayer();
+
+                System.exit(0);
 
 
                 try {

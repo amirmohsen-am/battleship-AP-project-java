@@ -70,6 +70,7 @@ public class ServerPlayer {
                                         System.out.println("reaadd!!");
                                         for (ObjectOutputStream output : outputsNOS) {
                                             output.writeObject(player);
+                                            //output.reset();
                                             output.flush();
                                         }
                                     } catch (IOException e) {

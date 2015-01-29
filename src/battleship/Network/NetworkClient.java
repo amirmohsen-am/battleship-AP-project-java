@@ -68,6 +68,7 @@ public class NetworkClient {
         try {
             output.writeObject(player);
             output.flush();
+            //output.reset();
         } catch (IOException e) {
             e.printStackTrace();
         }
