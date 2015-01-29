@@ -171,5 +171,4 @@ public class GameEngine {
         Player attackedPlayer = getOpponent(attackingPlayer);
         attackedPlayer.getMap().aircraft(row);
     }
-
 }

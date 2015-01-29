@@ -48,6 +48,13 @@ public class ServerPlayer {
                         System.out.println("new client connected");
                         outputsNOS.add(new ObjectOutputStream(socket.getOutputStream()));
                         final ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+
+/*                        try {
+                            Player player = (Player) input.readObject();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }*/
+
                         Thread thread1 = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -58,7 +65,9 @@ public class ServerPlayer {
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
+                                        System.out.println("Trying to read");
                                         Player player = (Player) input.readObject();
+                                        System.out.println("reaadd!!");
                                         for (ObjectOutputStream output : outputsNOS) {
                                             output.writeObject(player);
                                             output.flush();
