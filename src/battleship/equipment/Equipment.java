@@ -9,13 +9,14 @@ import battleship.exception.GameOverException;
 import battleship.position.EquipmentPosition;
 import battleship.position.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /** Equipments used in the game
  *
  * @author Ahanchi
  */
-abstract public class Equipment {
+abstract public class Equipment implements Serializable{
     protected int id;
 
     private Player owner = null;
