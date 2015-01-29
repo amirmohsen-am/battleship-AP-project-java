@@ -123,6 +123,8 @@ public class GUI {
         return button;
     }
 
+    boolean buttonNotPressed = false;
+
     public void networkFrame(String buttonText) {
         networkFrame = new JFrame();
         networkFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -157,6 +159,8 @@ public class GUI {
 
         networkFrame.pack();
         networkFrame.setVisible(true);
+
+
     }
 
     public void startOnlineGame() {
@@ -199,7 +203,7 @@ public class GUI {
         Map.startHeight = Map.startWidth = 0;
         Map.endWidth = dimension.x-1;
         Map.endHeight = dimension.y-1;
-        Server server = new Server();
+//        Server server = new Server();
         try {
             GraphicRunner.main("127.0.0.1", false, 0, GraphicRunner.getPlayers());
         } catch (IOException e) {
