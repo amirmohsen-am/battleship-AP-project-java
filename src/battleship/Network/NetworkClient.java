@@ -1,5 +1,8 @@
 package battleship.Network;
 
+import battleship.Map;
+import sun.nio.ch.Net;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,8 +18,12 @@ public class NetworkClient {
     ObjectInputStream input;
     ObjectOutputStream output;
 
-    public NetworkClient(){
-        this("127.0.0.1", 3109);
+    public NetworkClient() {
+        this(3109);
+    }
+
+    public NetworkClient(int portNumber) {
+        this("127.0.0.1", portNumber);
     }
 
     public NetworkClient(String machineName, int portNumber) {
@@ -54,5 +61,26 @@ public class NetworkClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void getMap(Map map) {
+        try {
+            output.writeObject(map);
+            output.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Map readMap() {
+        try {
+            Map map = (Map)input.readObject();
+            return map;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
