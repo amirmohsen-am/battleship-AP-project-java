@@ -66,7 +66,7 @@ public class PlayingFrame extends JFrame {
 
         for (int i = 0; i < 2; i++) {
             mapPanel[i] = new MapPanel();
-            cursor[i] = new GraphicObject(new Position(0, 0), GameImages.CursorAttack);
+            cursor[i] = new GraphicObject(new Position(0, 0), GameImages.CursorAttack, 0, 10);
             graphic[i].addGraphicObject(cursor[i]);
             mapPanel[i].init(players[i].getMap(), graphic[i]);
 

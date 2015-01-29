@@ -15,11 +15,11 @@ public class NetworkClient {
     ObjectInputStream input;
     ObjectOutputStream output;
 
-    NetworkClient(){
+    public NetworkClient(){
         this("127.0.0.1", 3109);
     }
 
-    NetworkClient(String machineName, int portNumber) {
+    public NetworkClient(String machineName, int portNumber) {
         this.machineName = machineName;
         this.portNumber = portNumber;
         try {

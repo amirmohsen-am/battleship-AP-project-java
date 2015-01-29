@@ -39,6 +39,7 @@ public class Server {
                 while(true) {
                     try {
                         Socket socket = myService.accept();
+                        System.out.println("new client connected");
                         outputsNOS.add(new ObjectOutputStream(socket.getOutputStream()));
                         final ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                         Thread thread1 = new Thread(new Runnable() {
@@ -55,13 +56,13 @@ public class Server {
                                 }
                             }
                         });
-                        thread1.run();
+                        thread1.start();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
         });
-        thread.run();
+        thread.start();
     }
 }
