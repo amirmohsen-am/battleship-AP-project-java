@@ -1,6 +1,9 @@
 package battleship.Network;
 
+import battleship.Map;
+
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -10,18 +13,18 @@ import java.util.ArrayList;
 /**
  * Created by Lidia on 1/29/2015.
  */
-public class Server {
+public class ServerMap {
 
     int portNumber;
     String machineName;
     ServerSocket myService;
     ArrayList<ObjectOutputStream> outputsNOS = new ArrayList<ObjectOutputStream>();
 
-    public Server() {
-        this("127.0.0.1", 3109);
+    public ServerMap() {
+        this("127.0.0.1",3121);
     }
 
-    public Server(String machineName, int portNumber) {
+    public ServerMap(String machineName, int portNumber) {
         this.machineName = machineName;
         this.portNumber = portNumber;
         try {
@@ -33,10 +36,10 @@ public class Server {
     }
 
     public void run() {
-        final Thread thread = new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true) {;
+                while(true) {
                     try {
                         Thread.sleep(20);
                         Socket socket = myService.accept();
@@ -53,9 +56,9 @@ public class Server {
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
-                                        String s = (String) input.readObject();
+                                        Map map = (Map) input.readObject();
                                         for (ObjectOutputStream output : outputsNOS) {
-                                            output.writeObject(s);
+                                            output.writeObject(map);
                                             output.flush();
                                         }
                                     } catch (IOException e) {
