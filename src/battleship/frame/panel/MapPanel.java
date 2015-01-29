@@ -41,6 +41,11 @@ public class MapPanel extends JPanel {
                     if (i == 9) {
                         if (map.isVisible(o.getMapPosition()))
                             continue;
+                        for (GraphicObject obj : graphic.getGraphicObjects()) {
+                            Position imagePosition2 = obj.getTopLeftGraphicPosition();
+                            if (obj.getGameImage().getName().equals("Sea") && obj.getMapPosition().equals(o.getMapPosition()))
+                                g2d.drawImage(obj.getCurrentImage().getImage(), imagePosition2.x, imagePosition2.y, obj.getWidth(), obj.getHeight(), null);
+                        }
                     }
                     g2d.drawImage(o.getCurrentImage().getImage(), imagePosition.x, imagePosition.y, o.getWidth(), o.getHeight(), null);
                 }

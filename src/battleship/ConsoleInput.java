@@ -130,7 +130,7 @@ public class ConsoleInput implements Serializable  {
         while (mapInput.hasNextInt()) {
             int row = mapInput.nextInt();
             mapInput.nextLine();
-            if (count >= GameEngine.ANTIAIRCRAFT_COUNT)
+            if (count >= GameEngine.ANTIAIRCRAFT_MAX)
                 return;
             equipments.add(new AntiAircraft(row));
             count++;
@@ -156,7 +156,7 @@ public class ConsoleInput implements Serializable  {
             }
             else
                 throw new IOException("Wrong Mine Input Format");
-            if (count >= GameEngine.MINE_COUNT)
+            if (count >= GameEngine.MINE_MAX)
                 continue;
             equipments.add(new Mine(new EquipmentPosition(x, y)));
             count++;

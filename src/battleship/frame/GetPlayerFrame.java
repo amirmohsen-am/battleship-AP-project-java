@@ -1,6 +1,7 @@
 package battleship.frame;
 
 import battleship.ConsoleInput;
+import battleship.GameEngine;
 import battleship.Map;
 import battleship.Player;
 import battleship.equipment.AntiAircraft;
@@ -35,6 +36,8 @@ public class GetPlayerFrame extends JFrame {
 
     static int tmp = 1;
 
+    public int shipCount[] = new int[4], mineCount = 0, antiCount = 0;
+
     boolean horizontal = true;
 
     boolean done = false;
@@ -65,8 +68,15 @@ public class GetPlayerFrame extends JFrame {
                 graphic.addGraphicObject(graphicObject);
 
             }
+        for (int i = 0; i < Map.getHeight(); i++)
+            for (int j = 0; j < Map.getWidth(); j++) {
+                GraphicObject graphicObject = new GraphicObject(new Position(j, i), GameImages.Sea, GameImages.SeaSpeed, true, 0);
+                graphicObject.setImageIndex(rand.nextInt(graphicObject.getGameImage().getImages().length));
+                graphic.addGraphicObject(graphicObject);
+            }
 
-        map = new Map(false);
+
+        map = new Map(true);
         player = new Player(name, map);
         player.setGraphic(graphic);
         map.setOwner(player);
@@ -104,17 +114,26 @@ public class GetPlayerFrame extends JFrame {
                         break;
                     case KeyEvent.VK_ENTER:
                         for (int i = 0; i < informationPanel.shipButton.length; i++)
-                            if (informationPanel.shipButton[i].isSelected()) {
+                            if (informationPanel.shipButton[i].isSelected() && shipCount[i]+1 <= GameEngine.SHIP_MAX[i]) {
+                                shipCount[i]++;
                                 if (cursor.isHorizontal())
                                     map.addEquipment(new Ship(ConsoleInput.getShipPositions(cursor.getMapPosition(), (i + 1), cursor.isHorizontal())), GameImages.ShipH[i]);
                                 else
                                     map.addEquipment(new Ship(ConsoleInput.getShipPositions(cursor.getMapPosition(), (i + 1), cursor.isHorizontal())), GameImages.ShipV[i]);
                             }
-                        if (informationPanel.mineButton.isSelected())
+                        if (informationPanel.mineButton.isSelected() && mineCount <= GameEngine.MINE_MAX) {
+                            mineCount++;
                             map.addEquipment(new Mine(cursor.getMapPosition()), GameImages.Mine);
-                        if (informationPanel.antiAircraftButton.isSelected())
+                        }
+                        if (informationPanel.antiAircraftButton.isSelected() && antiCount <= GameEngine.ANTIAIRCRAFT_MAX) {
+                            antiCount++;
                             map.addEquipment(new AntiAircraft(cursor.getMapPosition()), GameImages.AntiAircraft);
+                        }
                         break;
+                }
+                if (informationPanel.antiAircraftButton.isSelected()) {
+                    for (int j = 0; j < Map.getWidth(); j++)
+                        cursor.goLeftOneColumn();
                 }
             }
 
@@ -158,7 +177,7 @@ public class GetPlayerFrame extends JFrame {
 
 
     }
-    private class InformationPanel extends JPanel {
+    public class InformationPanel extends JPanel {
         JRadioButton[] shipButton = new JRadioButton[GameImages.ShipH.length];
         JRadioButton mineButton;
         JRadioButton antiAircraftButton;

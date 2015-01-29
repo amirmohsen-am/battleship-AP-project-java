@@ -8,6 +8,7 @@ import battleship.exception.GameOverException;
 import battleship.graphic.Graphic;
 import battleship.graphic.GraphicObject;
 import battleship.graphic.image.GameImage;
+import battleship.graphic.image.GameImages;
 import battleship.position.EquipmentPosition;
 import battleship.position.Position;
 import javafx.geometry.Pos;
@@ -92,6 +93,11 @@ public class Map implements Serializable{
     public void setVisible(int x, int y, boolean visible) {
         this.visible[x][y] = visible;
     }
+    public void setVisible(boolean visible) {
+        for (int i = 0; i < getHeight(); i++)
+            for (int j = 0; j < getWidth(); j++)
+                this.visible[j][i] = visible;
+    }
 
     public void setBlown(int x, int y, boolean blown) {
         this.blown[x][y] = blown;
@@ -144,6 +150,11 @@ public class Map implements Serializable{
             if (equipment instanceof AntiAircraft && equipment.contains(targetPosition) && !equipment.isBlown(targetPosition)) {
                 ((AntiAircraft) equipment).destroy();
                 controller.attack(((AntiAircraft) equipment).getPosition(), controller.getEngine().getOpponent(owner));
+                try {
+                    Thread.sleep(GameImages.AircraftSpeed);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 return;
             }
         }

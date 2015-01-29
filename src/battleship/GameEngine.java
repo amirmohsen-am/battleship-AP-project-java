@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
  * @author Ahanchi
  */
 public class GameEngine {
-    public final static int ANTIAIRCRAFT_COUNT = 2;
-    public final static int MINE_COUNT = 5;
+    public final static int ANTIAIRCRAFT_MAX = 2;
+    public final static int MINE_MAX = 5;
     public final static int RADAR_MAX_USES = 4;
     public final static int AIRCRAFT_MAX_USES = 2;
     public final static int RADAR_RADIUS = 1;
@@ -22,6 +22,9 @@ public class GameEngine {
     public static final int GO_MS = 50;
 
     public static final int[] SHIP_LENGTHS = {4, 3, 3, 2, 2, 1, 1};
+    public static final int[] SHIP_MAX = {2, 2, 2, 1};
+
+
 
     {
         timer = 0;

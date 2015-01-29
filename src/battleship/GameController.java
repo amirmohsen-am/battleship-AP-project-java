@@ -170,7 +170,7 @@ public class GameController {
         attackedPlayer.getGraphic().addGraphicObject(new GraphicObject(
                 targetPosition, GameImages.ExplodeAnimation, GameImages.ExplodeAnimationSpeed, false) );
         attackedPlayer.getGraphic().addGraphicObject(new GraphicObject(
-                targetPosition, GameImages.Fire, GameImages.FireSpeed, true, 4) );
+                targetPosition, GameImages.Fire, GameImages.FireSpeed, true, 6) );
     }
 
     /** Reports complete explosion of a ship
@@ -196,7 +196,7 @@ public class GameController {
         mine.getOwner().getGraphic().addGraphicObject(new GraphicObject(
                 mine.getPosition(), GameImages.ExplodeAnimation, GameImages.ExplodeAnimationSpeed, false));
         mine.getOwner().getGraphic().addGraphicObject(new GraphicObject(
-                mine.getPosition(), GameImages.Fire, GameImages.FireSpeed, true, 4) );
+                mine.getPosition(), GameImages.Fire, GameImages.FireSpeed, true, 6) );
 
         //engine.addEvent(0, "team " + mine.getOwner().getName() + " attack " + mine.getPosition().getString());
     }

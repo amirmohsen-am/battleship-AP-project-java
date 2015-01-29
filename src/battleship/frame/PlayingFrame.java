@@ -63,6 +63,11 @@ public class PlayingFrame extends JFrame {
         mainPanel.setFocusable(true);
         mainPanel.requestFocus();
 
+        for (int i = 0; i < 2; i++)
+            players[i].getMap().setVisible(false);
+        if (online)
+            players[playerNumber].getMap().setVisible(true);
+
 
         getContentPane().add(mainPanel);
 

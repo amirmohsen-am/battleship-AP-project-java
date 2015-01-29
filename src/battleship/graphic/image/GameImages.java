@@ -1,5 +1,6 @@
 package battleship.graphic.image;
 
+import battleship.GameEngine;
 import battleship.graphic.Graphic;
 
 import java.io.Serializable;
@@ -24,15 +25,16 @@ public class GameImages implements Serializable {
 
     public static GameImage RadarAnimation;
     public static GameImage Fire;
+    public static GameImage Sea;
 
     public static int ExplodeAnimationSpeed = 100;
     public static int CloudSpeed = 300;
     public static int FireSpeed = 140;
     public static int RadarSpeed = 140;
+    public static int SeaSpeed = 100;
+    public static int AircraftSpeed = 50;
 
     public static ArrayList<GameImage> gameImageArrayList = new ArrayList<GameImage>();
-
-
 
     static
     {
@@ -56,6 +58,8 @@ public class GameImages implements Serializable {
         Cloud = new GameImage("Cloud", "Cloud", Graphic.CELL_WIDTH*3/2, Graphic.CELL_HEIGHT*3/2);
 
         DestroyedCell = new GameImage("DestroyedCell", "DestroyedCell", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
+
+        Sea = new GameImage("Sea", "Sea", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
 
 
 //        gameImageArrayList.add(Mine);
@@ -81,6 +85,8 @@ public class GameImages implements Serializable {
         }
 
     }
+
+
 
     public static GameImage getGameImage(String name) {
         for (GameImage gameImage : gameImageArrayList)
