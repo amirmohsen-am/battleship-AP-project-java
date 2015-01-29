@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 
 /**
  * Created by persianpars on 1/24/15.
@@ -30,6 +31,7 @@ public class GetPlayerFrame extends JFrame {
     GraphicObject cursor;
     InformationPanel informationPanel;
     JPanel mainPanel;
+    public static final Random rand = new Random();
 
     static int tmp = 1;
 
@@ -57,8 +59,12 @@ public class GetPlayerFrame extends JFrame {
         graphic.addGraphicObject(cursor);
 
         for (int i = 0; i < Map.getHeight(); i++)
-            for (int j = 0; j < Map.getWidth(); j++)
-                graphic.addGraphicObject(new GraphicObject(new Position(j, i), GameImages.Cloud, GameImages.CloudSpeed, true, 9));
+            for (int j = 0; j < Map.getWidth(); j++) {
+                GraphicObject graphicObject = new GraphicObject(new Position(j, i), GameImages.Cloud, GameImages.CloudSpeed, true, 9);
+                graphicObject.setImageIndex(rand.nextInt(graphicObject.getGameImage().getImages().length));
+                graphic.addGraphicObject(graphicObject);
+
+            }
 
         map = new Map(false);
         player = new Player(name, map);

@@ -6,7 +6,9 @@ import battleship.Network.Server;
 import battleship.frame.GetPlayerFrame;
 import battleship.frame.PlayingFrame;
 
+import javax.swing.*;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
 /**
@@ -48,9 +50,13 @@ public class GraphicRunner {
     public static Player[] getPlayers() {
         Player[] players = new Player[2];
 //        GetPlayerFrame[] getPlayerFrames = new GetPlayerFrame[2];
+        System.out.println("Waiting for Player 1 Info");
         players[0] = new GetPlayerFrame().init(1);
-        System.out.println("dadga");
+        System.out.println("Got Player 1 Info");
+        System.out.println("Waiting for Player 2 Info");
         players[1] = new GetPlayerFrame().init(2);
+        System.out.println("Got Player 2 Info");
+
         return players;
     }
 

@@ -7,11 +7,11 @@ import battleship.position.Position;
  */
 public class ConsoleOutput {
     public static String attack(Player attackingPlayer, Position position) {
-        return "team " + attackingPlayer.getName() + " attack " + position.toString();
+        return "team " + attackingPlayer.getName() + " attack " + position.getString();
     }
 
     public static String radar(Player attackingPlayer, Position position) {
-        return "team " + attackingPlayer.getName() + " radar " + position.toString();
+        return "team " + attackingPlayer.getName() + " radar " + position.getString();
     }
 
     public static String aircraft(Player attackingPlayer, int row) {

@@ -11,12 +11,12 @@ import battleship.graphic.Graphic;
 import battleship.graphic.GraphicObject;
 import battleship.graphic.image.GameImages;
 import battleship.position.Position;
-import sun.nio.ch.Net;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 /**
  * Created by persianpars on 1/28/15.
@@ -35,8 +35,9 @@ public class PlayingFrame extends JFrame {
     JPanel mainPanel;
     PlayerPanel[] playerPanel = new PlayerPanel[2];
     MapPanel[] mapPanel = new MapPanel[2];
+    public GameInfoPanel gameInfoPanel;
 
-    InformationPanel[] informationPanel = new InformationPanel[2];
+    PlayerInfoPanel[] playerInfoPanel = new PlayerInfoPanel[2];
 
     public PlayingFrame(NetworkClient sender[]) {
         this.sender = sender;
@@ -70,12 +71,14 @@ public class PlayingFrame extends JFrame {
             graphic[i].addGraphicObject(cursor[i]);
             mapPanel[i].init(players[i].getMap(), graphic[i]);
 
-            informationPanel[i] = new InformationPanel();
+            playerInfoPanel[i] = new PlayerInfoPanel();
 
             playerPanel[i] = new PlayerPanel();
             playerPanel[i].add(mapPanel[i]);
-            playerPanel[i].add(informationPanel[i]);
+            playerPanel[i].add(playerInfoPanel[i]);
         }
+
+
         Player1KeyListener player1KeyListener = new Player1KeyListener(this, cursor[1]);
         Player2KeyListener player2KeyListener = new Player2KeyListener(this, cursor[0]);
 
@@ -85,18 +88,10 @@ public class PlayingFrame extends JFrame {
 
         mainPanel.add(playerPanel[0]);
         mainPanel.add(new JSeparator(SwingConstants.VERTICAL));
-        JButton go = new JButton("Go");
-        go.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    controller.getEngine().update();
-                } catch (GameOverException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
-        mainPanel.add(go);
+        gameInfoPanel = new GameInfoPanel();
+        gameInfoPanel.init(controller, engine);
+
+        mainPanel.add(gameInfoPanel);
         mainPanel.add(new JSeparator(SwingConstants.VERTICAL));
         mainPanel.add(playerPanel[1]);
 
@@ -105,7 +100,7 @@ public class PlayingFrame extends JFrame {
 
     }
 
-    private class PlayerPanel extends JPanel {
+    public class PlayerPanel extends JPanel {
         public PlayerPanel() {
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -114,13 +109,13 @@ public class PlayingFrame extends JFrame {
         }
     }
 
-    protected class InformationPanel extends JPanel {
+    public class PlayerInfoPanel extends JPanel {
         JRadioButton attackButton;
         JRadioButton radarButton;
         JRadioButton aircraftButton;
         ButtonGroup buttonGroup;
 
-        public InformationPanel() {
+        public PlayerInfoPanel() {
             setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             setPreferredSize(new Dimension(150, 100));
@@ -149,4 +144,44 @@ public class PlayingFrame extends JFrame {
         }
 
     }
+}
+class GameInfoPanel extends JPanel {
+    JLabel timeLabel;
+    GameController controller;
+    GameEngine engine;
+
+    public void init(final GameController controller, GameEngine engine) {
+        this.engine = engine;
+        this.controller = controller;
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+//            setPreferredSize(new Dimension(150, 100));
+
+        timeLabel = new JLabel("time: " + engine.getTimer());
+//        JButton go = new JButton("Go");
+//        go.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                try {
+//                    controller.getEngine().update();
+//                } catch (GameOverException e1) {
+//                    e1.printStackTrace();
+//                }
+//            }
+//        });
+//        go.setFocusable(false);
+
+//        timeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        go.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(timeLabel);
+//        add(go);
+    }
+
+//    @Override
+//    public void paintComponents(Graphics g) {
+//        System.out.println("Salam");
+//        Graphics2D g2d = (Graphics2D) g;
+//        g2d.drawString("time: " + engine.getTimer(), 1, 10);
+//        timeLabel.setText("time: " + engine.getTimer());
+//    }
 }

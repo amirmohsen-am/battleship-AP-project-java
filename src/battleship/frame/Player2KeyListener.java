@@ -35,8 +35,17 @@ public class Player2KeyListener implements KeyListener{
             case KeyEvent.VK_L:
                 cursor.goRightOneColumn();
                 break;
+            case KeyEvent.VK_O:
+                frame.playerInfoPanel[x].attackButton.setSelected(true);
+                break;
+            case KeyEvent.VK_P:
+                frame.playerInfoPanel[x].radarButton.setSelected(true);
+                break;
+            case KeyEvent.VK_OPEN_BRACKET:
+                frame.playerInfoPanel[x].aircraftButton.setSelected(true);
+                break;
             case KeyEvent.VK_SEMICOLON:
-                String text = ButtonSelected.getSelectedButtonText(frame.informationPanel[x].buttonGroup);
+                String text = ButtonSelected.getSelectedButtonText(frame.playerInfoPanel[x].buttonGroup);
                 switch (text) {
                     case "Attack":
                         frame.sender[x].send(frame.engine.getTimer() + " " + ConsoleOutput.attack(frame.players[x], cursor.getMapPosition()));

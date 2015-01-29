@@ -63,8 +63,7 @@ public class GameEngine {
         Pattern aircraftPattern = Pattern.compile("team (?<name>.+) aircraft (?<row>\\d+)");
 
 //        resizeEvents(timer+1);
-        if (!events.isEmpty()) {
-
+        while (!events.isEmpty() && events.first().time <= timer) {
             String query = events.first().command;
             events.remove(events.first());
             Matcher attackMatcher = attackPattern.matcher(query);
@@ -106,9 +105,6 @@ public class GameEngine {
      * @param event the input event
      */
     void addEvent(double time, String event) {
-        time += timer;
-//        resizeEvents(time+1);
-//        events.get(time).add(event);
         events.add(new Event(time, event));
     }
 

@@ -12,6 +12,7 @@ import battleship.graphic.GraphicObject;
 import battleship.graphic.image.GameImages;
 import battleship.position.Position;
 
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class GameController {
      * @param log the Log
      * @param consoleInput the consoleInput
      */
-    public void init(final GameEngine engine, Log log, ConsoleInput consoleInput, PlayingFrame playingFrame) {
+    public void init(final GameEngine engine, Log log, ConsoleInput consoleInput, final PlayingFrame playingFrame) {
         this.engine = engine;
         this.log = log;
         this.consoleInput = consoleInput;
@@ -53,8 +54,15 @@ public class GameController {
                 equipment.setOwner(player);
             }
             player.getMap().setOwner(player);
+            player.getMap().setController(this);
         };
-        playingFrame.init(this, engine);
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+                playingFrame.init(GameController.this, engine);
+//            }
+//        });
+
     }
 
     public ConsoleInput getConsoleInput() {
@@ -82,6 +90,27 @@ public class GameController {
             }
         });
         paintThread.start();
+        Thread goThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!gameHasEnded) {
+                    try {
+                        Thread.sleep(GameEngine.GO_MS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        engine.update();
+                    } catch (GameOverException e) {
+                        JOptionPane.showMessageDialog(null, e.getMessage());
+                        gameHasEnded = true;
+                    }
+                }
+                System.exit(0);
+
+            }
+        });
+        goThread.start();
 
         while (!gameHasEnded) {
             try {
@@ -138,6 +167,8 @@ public class GameController {
         log.println("team " + engine.getOpponent(attackedPlayer).getName() + " explode " +  targetPosition.getString());
         attackedPlayer.getGraphic().addGraphicObject(new GraphicObject(
                 targetPosition, GameImages.ExplodeAnimation, GameImages.ExplodeAnimationSpeed, false) );
+        attackedPlayer.getGraphic().addGraphicObject(new GraphicObject(
+                targetPosition, GameImages.Fire, GameImages.FireSpeed, true, 4) );
     }
 
     /** Reports complete explosion of a ship
@@ -167,8 +198,9 @@ public class GameController {
      *
      * @param antiAircraft the antiAircraft that has defended against the aircraft
      */
-    public void reportAntiAircraftHit(AntiAircraft antiAircraft) {
+    public void reportAircraftHit(AntiAircraft antiAircraft) {
         log.println("aircraft unsuccessful");
+
     }
 
     /** Reports explosion of an antiAircraft that has benn hit directly
@@ -185,9 +217,19 @@ public class GameController {
      * @param positions the positions that has been identified by radar command
      * @param owner the player whose cells have been identified
      */
-    public void reportRadar(ArrayList<Position> positions, Player owner) {
-        for (Position position : positions)
+    public void reportRadar(ArrayList<Position> positions, Player owner, Position middlePosition) {
+        for (Position position : positions) {
             log.println("team " + engine.getOpponent(owner).getName() + " detected " + position.getString());
+        }
+        for (int i = 0; i < Map.getHeight(); i++)
+            for (int j = 0; j < Map.getWidth(); j++) {
+                Position mapPosition = new Position(j, i);
+                if (mapPosition.getMaxDistance(middlePosition) <= GameEngine.RADAR_RADIUS)
+                    owner.getMap().setVisible(mapPosition.x, mapPosition.y, true);
+            }
+
+//        owner.getGraphic().addGraphicObject(new GraphicObject(
+//                middlePosition, GameImages.RadarAnimation, GameImages.RadarSpeed, false, 5) );
     }
 
 }

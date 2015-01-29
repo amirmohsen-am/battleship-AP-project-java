@@ -21,10 +21,17 @@ public class GameImages {
     public static GameImage Cloud;
     public static GameImage DestroyedCell;
 
+    public static GameImage RadarAnimation;
+    public static GameImage Fire;
+
     public static int ExplodeAnimationSpeed = 100;
-    public static int CloudSpeed = 800;
+    public static int CloudSpeed = 300;
+    public static int FireSpeed = 140;
+    public static int RadarSpeed = 140;
 
     public static ArrayList<GameImage> gameImageArrayList = new ArrayList<GameImage>();
+
+
 
     static
     {
@@ -41,11 +48,14 @@ public class GameImages {
         CursorAircraft = new GameImage("CursorAircraft", "CursorAircraft", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
 
         ExplodeAnimation = new GameImage("Explosion", "Explosion", Graphic.CELL_WIDTH+10, Graphic.CELL_HEIGHT+10);
+        RadarAnimation = new GameImage("Radar", "Radar", Graphic.CELL_WIDTH * 3, Graphic.CELL_HEIGHT * 3);
+        Fire = new GameImage("Fire", "Fire", Graphic.CELL_WIDTH + 10, Graphic.CELL_HEIGHT + 10);
 
         VisibleCell = new GameImage("VisibleCell", "VisibleCell");
         Cloud = new GameImage("Cloud", "Cloud", Graphic.CELL_WIDTH*3/2, Graphic.CELL_HEIGHT*3/2);
 
         DestroyedCell = new GameImage("DestroyedCell", "DestroyedCell", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
+
 
 //        gameImageArrayList.add(Mine);
 //        gameImageArrayList.add(AntiAircraft);

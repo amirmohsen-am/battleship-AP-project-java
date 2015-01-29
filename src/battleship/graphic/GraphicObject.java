@@ -19,6 +19,10 @@ public class GraphicObject implements Runnable {
     boolean loop = false;
     int priority = 5;
 
+    public void setImageIndex(int imageIndex) {
+        this.imageIndex = imageIndex;
+    }
+
     public void setPriority(int priority) {
         this.priority = priority;
     }

@@ -46,6 +46,8 @@ public class ConsoleInput {
 //        if (!gameInput.hasNext())
 //            throw new NoMoreInputException();
         String input = gameInput.nextLine();
+        double time = Double.parseDouble(input.substring(0, input.indexOf(' ') - 1));
+        input = input.substring(input.indexOf(' ')+1);
         input = input.toLowerCase();
         if (input.contains("go")) {
             int number = Integer.parseInt(input.substring(3));
@@ -53,9 +55,9 @@ public class ConsoleInput {
                 controller.getEngine().update();
         }
         else if (input.contains("attack"))
-            controller.getEngine().addEvent(1, input);
+            controller.getEngine().addEvent(time, input);
         else if (input.contains("aircraft") || input.contains("radar"))
-            controller.getEngine().addEvent(2, input);
+            controller.getEngine().addEvent(time, input);
         else
             throw new IOException("Wrong Input Format during Game");
     }
