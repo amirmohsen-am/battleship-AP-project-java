@@ -38,6 +38,7 @@ public class Server {
             public void run() {
                 while(true) {
                     try {
+                        Thread.sleep(20);
                         Socket socket = myService.accept();
                         System.out.println("new client connected");
                         outputsNOS.add(new ObjectOutputStream(socket.getOutputStream()));
@@ -45,19 +46,30 @@ public class Server {
                         Thread thread1 = new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                try {
-                                    String s = (String)input.readObject();
-                                    for(ObjectOutputStream output : outputsNOS)
-                                        output.writeObject(s);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                } catch (ClassNotFoundException e) {
-                                    e.printStackTrace();
+                                while (true) {
+                                    try {
+                                        try {
+                                            Thread.sleep(20);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        String s = (String) input.readObject();
+                                        for (ObjectOutputStream output : outputsNOS) {
+                                            output.writeObject(s);
+                                            output.flush();
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (ClassNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         });
                         thread1.start();
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }

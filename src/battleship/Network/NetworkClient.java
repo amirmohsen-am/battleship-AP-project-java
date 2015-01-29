@@ -34,7 +34,10 @@ public class NetworkClient {
 
     public String nextLine() {
         try {
-            return (String)input.readObject();
+            System.out.println("waiting for network input");
+            String result = (String)input.readObject();
+            System.out.println("got input");
+            return result;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -46,6 +49,8 @@ public class NetworkClient {
     public void send(String s) {
         try {
             output.writeObject(s);
+            output.flush();
+            System.out.println("Send: " + s);
         } catch (IOException e) {
             e.printStackTrace();
         }

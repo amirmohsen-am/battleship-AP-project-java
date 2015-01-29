@@ -61,8 +61,13 @@ public class Map {
         this.equipments = equipments;
     }
 
+
     {
         equipments = new ArrayList<Equipment>();
+    }
+
+    public void setController(GameController controller) {
+        this.controller = controller;
     }
 
     public void setOwner(Player owner) {
@@ -160,7 +165,7 @@ public class Map {
                 for (EquipmentPosition position : equipment.getPositions())
                     if (!position.isBlown() && targetPosition.getMaxDistance(position) <= GameEngine.RADAR_RADIUS)
                         result.add(position);
-        controller.reportRadar(result, owner);
+        controller.reportRadar(result, owner, targetPosition);
 
     }
 

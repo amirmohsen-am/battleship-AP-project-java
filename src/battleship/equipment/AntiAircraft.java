@@ -76,7 +76,7 @@ public class AntiAircraft extends Equipment {
         if (isDestroyed())
             throw new RuntimeException("AntiAircraft " + id + "is Blown");
         position.setBlown(true);
-        getController().reportAntiAircraftHit(this);
+        getController().reportAircraftHit(this);
 
     }
 }
