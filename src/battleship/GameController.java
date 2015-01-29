@@ -193,6 +193,11 @@ public class GameController {
     public void reportMineExplode(Mine mine) throws GameOverException {
         log.println("team " + engine.getOpponent(mine.getOwner()).getName() + " mine trap " + mine.getPosition().getString());
         this.attack(mine.getPosition(), mine.getOwner());
+        mine.getOwner().getGraphic().addGraphicObject(new GraphicObject(
+                mine.getPosition(), GameImages.ExplodeAnimation, GameImages.ExplodeAnimationSpeed, false));
+        mine.getOwner().getGraphic().addGraphicObject(new GraphicObject(
+                mine.getPosition(), GameImages.Fire, GameImages.FireSpeed, true, 4) );
+
         //engine.addEvent(0, "team " + mine.getOwner().getName() + " attack " + mine.getPosition().getString());
     }
 
@@ -202,6 +207,7 @@ public class GameController {
      */
     public void reportAircraftHit(AntiAircraft antiAircraft) {
         log.println("aircraft unsuccessful");
+
 
     }
 

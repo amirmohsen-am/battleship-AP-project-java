@@ -11,6 +11,7 @@ import battleship.position.EquipmentPosition;
 import battleship.position.Position;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -20,7 +21,7 @@ import java.util.regex.Pattern;
  *
  * @author Ahanchi
  */
-public class ConsoleInput {
+public class ConsoleInput implements Serializable  {
     private GameController controller;
     private NetworkClient gameInput;
 //    private Scanner gameInput;
@@ -42,7 +43,7 @@ public class ConsoleInput {
      *
      * @throws Exception if the game is not over, but there's no more input
      */
-    public void next() throws NoMoreInputException, IOException, GameOverException {
+    public void next() throws NoMoreInputException, IOException, GameOverException{
 //        if (!gameInput.hasNext())
 //            throw new NoMoreInputException();
         String input = gameInput.nextLine();

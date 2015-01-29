@@ -1,11 +1,12 @@
 package battleship.runner;
 
 import battleship.Map;
+import battleship.Network.NetworkClient;
 import battleship.Network.Server;
+import battleship.Network.ServerPlayer;
 import battleship.Player;
 import battleship.frame.GetPlayerFrame;
 import battleship.position.Position;
-import battleship.runner.startGame.GUI;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -25,7 +26,7 @@ public class StartGameRunner {
             Map.startHeight = Map.startWidth = 0;
             Map.endWidth = dimension.x-1;
             Map.endHeight = dimension.y-1;
-//        Server server = new Server();
+            Server server = new Server();
             try {
                 GraphicRunner.main("127.0.0.1", false, 0, GraphicRunner.getPlayers());
             } catch (IOException e) {
@@ -36,16 +37,30 @@ public class StartGameRunner {
 
             Player[] players = new Player[2];
             if (string.equals("Create")) {
-
-                Server server = new Server();
 //            Position dimension = new GetMapDimensionFrame().init();
                 Position dimension = new Position(10, 10);
                 Map.startHeight = Map.startWidth = 0;
                 Map.endWidth = dimension.x-1;
                 Map.endHeight = dimension.y-1;
 
+                Server server = new Server();
+                ServerPlayer serverPlayer = new ServerPlayer();
+
+                NetworkClient client = new NetworkClient(3121);
+                while(serverPlayer.numberOfPlayers < 2) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 players[0] = new GetPlayerFrame().init(0);
-                players[1] = new GetPlayerFrame().init(0);
+
+                client.sendPlayer(players[0]);
+//                players[1] = new GetPlayerFrame().init(0);
+                players[0] = client.readPlayer();
+                players[1] = client.readPlayer();
                 try {
                     GraphicRunner.main("127.0.0.1", true, 0, players);
                 } catch (IOException e) {
@@ -54,8 +69,18 @@ public class StartGameRunner {
             }
             else {
                 String IPAddress = scanner.next();
-                players[0] = new GetPlayerFrame().init(0);
+  //              players[0] = new GetPlayerFrame().init(0);
+
+                NetworkClient client = new NetworkClient(IPAddress, 3121);
+
                 players[1] = new GetPlayerFrame().init(0);
+
+                client.sendPlayer(players[1]);
+
+                players[0] = client.readPlayer();
+                players[1] = client.readPlayer();
+
+
                 try {
                     GraphicRunner.main(IPAddress, true, 1, players);
                 } catch (IOException e) {

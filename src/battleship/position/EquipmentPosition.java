@@ -4,11 +4,13 @@ package battleship.position;
  * Created by persianpars on 12/25/14.
  */
 
+import java.io.Serializable;
+
 /** A kind of position which is included in an equipment
  *
  * @author Ahanchi
  */
-public class EquipmentPosition extends Position {
+public class EquipmentPosition extends Position implements Serializable {
     private boolean blown;
 
     {

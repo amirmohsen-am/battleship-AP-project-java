@@ -1,10 +1,12 @@
 package battleship.position;
 
+import java.io.Serializable;
+
 /** Specifies a cell of the map
  *
  * @author Ahanchi
  */
-public class Position {
+public class Position implements Serializable {
     public int x, y;
 
     public Position(int x, int y) {

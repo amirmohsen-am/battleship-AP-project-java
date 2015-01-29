@@ -1,9 +1,9 @@
 package battleship.Network;
 
 import battleship.Map;
+import battleship.Player;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -13,18 +13,19 @@ import java.util.ArrayList;
 /**
  * Created by Lidia on 1/29/2015.
  */
-public class ServerMap {
+public class ServerPlayer {
 
     int portNumber;
     String machineName;
     ServerSocket myService;
     ArrayList<ObjectOutputStream> outputsNOS = new ArrayList<ObjectOutputStream>();
+    public int numberOfPlayers = 0;
 
-    public ServerMap() {
+    public ServerPlayer() {
         this("127.0.0.1",3121);
     }
 
-    public ServerMap(String machineName, int portNumber) {
+    public ServerPlayer(String machineName, int portNumber) {
         this.machineName = machineName;
         this.portNumber = portNumber;
         try {
@@ -43,6 +44,7 @@ public class ServerMap {
                     try {
                         Thread.sleep(20);
                         Socket socket = myService.accept();
+                        numberOfPlayers++;
                         System.out.println("new client connected");
                         outputsNOS.add(new ObjectOutputStream(socket.getOutputStream()));
                         final ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
@@ -56,9 +58,9 @@ public class ServerMap {
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
-                                        Map map = (Map) input.readObject();
+                                        Player player = (Player) input.readObject();
                                         for (ObjectOutputStream output : outputsNOS) {
-                                            output.writeObject(map);
+                                            output.writeObject(player);
                                             output.flush();
                                         }
                                     } catch (IOException e) {

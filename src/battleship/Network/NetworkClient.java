@@ -1,6 +1,7 @@
 package battleship.Network;
 
 import battleship.Map;
+import battleship.Player;
 import sun.nio.ch.Net;
 
 import java.io.IOException;
@@ -63,19 +64,19 @@ public class NetworkClient {
         }
     }
 
-    public void getMap(Map map) {
+    public void sendPlayer(Player player) {
         try {
-            output.writeObject(map);
+            output.writeObject(player);
             output.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Map readMap() {
+    public Player readPlayer() {
         try {
-            Map map = (Map)input.readObject();
-            return map;
+            Player player = (Player)input.readObject();
+            return player;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

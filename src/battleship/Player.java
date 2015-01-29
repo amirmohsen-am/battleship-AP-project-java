@@ -8,7 +8,7 @@ import java.io.Serializable;
  *
  * @author Ahanchi
  */
-public class Player implements Serializable{
+public class Player implements Serializable {
     private String name;
     private Map map;
     private int radarUsed = 0;
