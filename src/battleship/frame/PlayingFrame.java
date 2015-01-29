@@ -1,10 +1,8 @@
 package battleship.frame;
 
-import battleship.ConsoleOutput;
 import battleship.GameController;
 import battleship.GameEngine;
-import battleship.Network.NetworkInputStream;
-import battleship.Network.NetworkOutputStream;
+import battleship.Network.NetworkClient;
 import battleship.Player;
 import battleship.exception.GameOverException;
 import battleship.frame.button.TypeButton;
@@ -13,13 +11,12 @@ import battleship.graphic.Graphic;
 import battleship.graphic.GraphicObject;
 import battleship.graphic.image.GameImages;
 import battleship.position.Position;
+import sun.nio.ch.Net;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  * Created by persianpars on 1/28/15.
@@ -30,7 +27,7 @@ public class PlayingFrame extends JFrame {
 
     Player[] players;
 
-    NetworkOutputStream[] sender;
+    NetworkClient[] sender;
 
     Graphic[] graphic;
     GraphicObject[] cursor = new GraphicObject[2];
@@ -41,7 +38,7 @@ public class PlayingFrame extends JFrame {
 
     InformationPanel[] informationPanel = new InformationPanel[2];
 
-    public PlayingFrame(NetworkOutputStream sender[]) {
+    public PlayingFrame(NetworkClient sender[]) {
         this.sender = sender;
     }
 

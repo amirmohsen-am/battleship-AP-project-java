@@ -1,6 +1,5 @@
 package battleship;
 
-import battleship.Network.NetworkInputStream;
 import battleship.equipment.AntiAircraft;
 import battleship.equipment.Equipment;
 import battleship.equipment.Mine;
