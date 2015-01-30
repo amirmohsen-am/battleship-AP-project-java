@@ -159,6 +159,7 @@ public class Map implements Serializable{
             }
         }
         // there is no antiaircraft in this row
+        controller.reportAircraftSuccessful(owner, targetRow);
         for (int x = startWidth; x <= endWidth; x++) {
             controller.attack(new Position(x, targetRow), controller.getEngine().getOpponent(owner));
             try {

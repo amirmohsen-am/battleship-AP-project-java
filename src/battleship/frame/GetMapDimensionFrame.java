@@ -50,6 +50,8 @@ public class GetMapDimensionFrame extends JFrame {
             }
         });
 
+        mainPanel.add(button);
+
         pack();
         setVisible(true);
 
@@ -61,7 +63,9 @@ public class GetMapDimensionFrame extends JFrame {
             }
         }
 
-        return new Position(Integer.parseInt(widthField.getText()), Integer.parseInt(heightField.getText()));
+        Position result = new Position(Integer.parseInt(widthField.getText()), Integer.parseInt(heightField.getText()));
+        dispose();
+        return result;
     }
 
 }

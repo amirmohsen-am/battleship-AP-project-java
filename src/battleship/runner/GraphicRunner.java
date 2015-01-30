@@ -56,7 +56,6 @@ public class GraphicRunner {
         System.out.println("Waiting for Player 2 Info");
         players[1] = new GetPlayerFrame().init(2);
         System.out.println("Got Player 2 Info");
-
         return players;
     }
 

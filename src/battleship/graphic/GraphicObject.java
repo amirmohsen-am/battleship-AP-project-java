@@ -160,19 +160,24 @@ public class GraphicObject implements Runnable, Serializable {
     @Override
     public void run() {
         while (speedMS != 0) {
-
-            if (imageIndex + 1 >= gameImage.getImages().length) {
-                if (loop)
-                    imageIndex = 0;
-                else
-                    break;
-            } else
-                imageIndex++;
+            if (gameImage.getName().equals("Aircraft")) {
+                middleGraphicPosition.x += 2;
+                if (middleGraphicPosition.x >= Map.getWidth() * Graphic.CELL_WIDTH);
+            } else {
+                if (imageIndex + 1 >= gameImage.getImages().length) {
+                    if (loop)
+                        imageIndex = 0;
+                    else
+                        break;
+                } else
+                    imageIndex++;
+            }
             try {
                 Thread.sleep(speedMS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
     }
 

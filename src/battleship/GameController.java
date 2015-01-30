@@ -106,6 +106,7 @@ public class GameController {
                         gameHasEnded = true;
                     }
                 }
+                log.close();
                 System.exit(0);
 
             }
@@ -213,11 +214,13 @@ public class GameController {
 
     }
 
-    public void reportAircraftSuccessful(AntiAircraft antiAircraft) {
+    public void reportAircraftSuccessful(Player attackedPlayer, int row) {
         log.println("aircraft successful");
-        antiAircraft.getOwner().getGraphic().addGraphicObject(new GraphicObject(
-                antiAircraft.getPosition(), GameImages.ExplodeAnimation, GameImages.ExplodeAnimationSpeed, false));
+//        engine.getOpponent(attackedPlayer).getGraphic().addGraphicObject(new GraphicObject(
+//                new Position(Map.startWidth, row), GameImages.Aircraft, GameImages.AircraftSpeed, true));
 
+        attackedPlayer.getGraphic().addGraphicObject(new GraphicObject(
+                new Position(Map.startWidth, row), GameImages.Aircraft, GameImages.AircraftSpeed, true, 10));
 
     }
     /** Reports explosion of an antiAircraft that has benn hit directly
@@ -240,6 +243,9 @@ public class GameController {
         for (Position position : positions) {
             log.println("team " + engine.getOpponent(owner).getName() + " detected " + position.getString());
         }
+        owner.getGraphic().addGraphicObject(new GraphicObject(
+                middlePosition, GameImages.RadarAnimation, GameImages.RadarSpeed, false));
+
         for (int i = 0; i < Map.getHeight(); i++)
             for (int j = 0; j < Map.getWidth(); j++) {
                 Position mapPosition = new Position(j, i);

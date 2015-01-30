@@ -31,10 +31,10 @@ public class GameImages implements Serializable {
     public static int ExplodeAnimationSpeed = 100;
     public static int CloudSpeed = 300;
     public static int FireSpeed = 140;
-    public static int RadarSpeed = 140;
     public static int SeaSpeed = 100;
-    public static int AircraftSpeed = 50;
+    public static int AircraftSpeed = 8;
     public static int AircraftAttackSpeed = 200;
+    public static int RadarSpeed = 100;
 
     public static ArrayList<GameImage> gameImageArrayList = new ArrayList<GameImage>();
 
@@ -53,7 +53,7 @@ public class GameImages implements Serializable {
         CursorAircraft = new GameImage("CursorAircraft", "CursorAircraft", Graphic.CELL_WIDTH, Graphic.CELL_HEIGHT);
 
         ExplodeAnimation = new GameImage("Explosion", "Explosion", Graphic.CELL_WIDTH+10, Graphic.CELL_HEIGHT+10);
-        RadarAnimation = new GameImage("Radar", "Radar", Graphic.CELL_WIDTH * 3, Graphic.CELL_HEIGHT * 3);
+        RadarAnimation = new GameImage("Radar", "Radar", Graphic.CELL_WIDTH * 3 - 10, Graphic.CELL_HEIGHT * 3 - 10);
         Fire = new GameImage("Fire", "Fire", Graphic.CELL_WIDTH*3/2, Graphic.CELL_HEIGHT*3/2);
 
         VisibleCell = new GameImage("VisibleCell", "VisibleCell");

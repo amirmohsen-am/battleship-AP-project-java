@@ -5,8 +5,10 @@ import battleship.Network.NetworkClient;
 import battleship.Network.Server;
 import battleship.Network.ServerPlayer;
 import battleship.Player;
+import battleship.frame.GetMapDimensionFrame;
 import battleship.frame.GetPlayerFrame;
 import battleship.position.Position;
+import battleship.runner.startGame.GUI;
 
 import javax.annotation.processing.SupportedSourceVersion;
 import java.io.IOException;
@@ -21,9 +23,11 @@ public class StartGameRunner {
         Scanner scanner = new Scanner(System.in);
 //        GUI gui = new GUI();
 //        gui.start();
+
         String string = scanner.next();
         if (Objects.equals(string, "Offline")) {
-            Position dimension = new Position(10, 10);
+            Position dimension = new GetMapDimensionFrame().init();
+//            Position dimension = new Position(10, 10);
             Map.startHeight = Map.startWidth = 0;
             Map.endWidth = dimension.x-1;
             Map.endHeight = dimension.y-1;
@@ -37,12 +41,13 @@ public class StartGameRunner {
         else {
 
             Player[] players = new Player[2];
-            Position dimension = new Position(10, 10);
+            Position dimension = new GetMapDimensionFrame().init();
+//            Position dimension = new Position(10, 10);
             Map.startHeight = Map.startWidth = 0;
             Map.endWidth = dimension.x-1;
             Map.endHeight = dimension.y-1;
             if (string.equals("Create")) {
-//            Position dimension = new GetMapDimensionFrame().init();
+
 
 
                 Server server = new Server();
@@ -123,5 +128,6 @@ public class StartGameRunner {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+
     }
 }

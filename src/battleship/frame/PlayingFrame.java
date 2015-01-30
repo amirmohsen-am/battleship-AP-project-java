@@ -192,13 +192,13 @@ public class PlayingFrame extends JFrame {
 //        add(go);
         }
 
-//    @Override
-//    public void paintComponents(Graphics g) {
+    @Override
+    public void paintComponents(Graphics g) {
 //        System.out.println("Salam");
 //        Graphics2D g2d = (Graphics2D) g;
 //        g2d.drawString("time: " + engine.getTimer(), 1, 10);
-//        timeLabel.setText("time: " + engine.getTimer());
-//    }
+        timeLabel.setText("time: " + engine.getTimer());
+    }
     }
 
 }
